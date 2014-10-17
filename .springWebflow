@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webflow-project-description>
+	<version>1</version>
+	<pluginVersion><![CDATA[3.6.0.201407080615-RELEASE]]></pluginVersion>
+	<configs>
+		<config>
+			<file>WebContent/WEB-INF/flows/cart-flow.xml</file>
+			<name><![CDATA[cart-flow]]></name>
+		</config>
+		<config>
+			<file>WebContent/WEB-INF/flows/shoppingcart-flow.xml</file>
+			<name><![CDATA[shoppingcart-flow]]></name>
+			<beans-config><![CDATA[1:BeansModel|2:devcode-webdemo-7|3:WebContent/WEB-INF/devcodeweb-servlet.xml]]></beans-config>
+		</config>
+	</configs>
+</webflow-project-description>

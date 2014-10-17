@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+
+<tiles-definitions>
+	<definition name="devCodeBase" template="/WEB-INF/templates/template.jsp">
+	<put-attribute name="title" value="DevCode"></put-attribute>
+	<put-attribute name="includes" value=""></put-attribute>
+	<put-attribute name="header" value="/WEB-INF/tiles/header.jsp"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles/content.jsp"></put-attribute>
+	<put-attribute name="includes2" value=""></put-attribute>
+	<put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp"></put-attribute>	
+	</definition>
+	
+	<definition name="home" extends="devCodeBase">
+	<put-attribute name="title" value="DevCode"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles/home.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="products" extends="devCodeBase">
+	<put-attribute name="includes" value="/WEB-INF/tiles/productscript.jsp"></put-attribute>
+	<put-attribute name="title" value="Products Demo"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles/products.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="admin" extends="devCodeBase">
+	<put-attribute name="title" value="Admin"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles/admin.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="addproduct" extends="devCodeBase">
+	<put-attribute name="title" value="Add Product"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles/addproduct.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="productcreated" extends="devCodeBase">
+	<put-attribute name="title" value="Product Added"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles/productcreated.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="error" extends="devCodeBase">
+	<put-attribute name="title" value="Error!"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles/error.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="newaccount" extends="devCodeBase">
+	<put-attribute name="includes" value="/WEB-INF/tiles/newaccountscript.jsp"></put-attribute>
+	<put-attribute name="title" value="Create Admin Account"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles/newaccount.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="newcustomeraccount" extends="devCodeBase">
+	<put-attribute name="includes" value="/WEB-INF/tiles/newaccountscript.jsp"></put-attribute>
+	<put-attribute name="title" value="Create Account"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles/newcustomeraccount.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="login" extends="devCodeBase" >
+	<put-attribute name="title" value="Sign in"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles/login.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="loggedout" extends="devCodeBase">
+	<put-attribute name="title" value="Logged out"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles/loggedout.jp"></put-attribute>
+	</definition>
+	
+	<definition name="denied" extends="devCodeBase" >
+	<put-attribute name="title" value="Denied Access"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles/denied.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="accountcreated" extends="devCodeBase" >
+	<put-attribute name="title" value="Admin Created"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles/accountcreated.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="customeraccountcreated" extends="devCodeBase" >
+	<put-attribute name="title" value="Account Created"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles/customeraccountcreated.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="cart" extends="devCodeBase" >
+	<put-attribute name="title" value="Cart Content"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles/cart.jsp"></put-attribute>
+	</definition>
+	
+	
+	<definition name="checkout" extends="devCodeBase" >
+	<put-attribute name="title" value="Checkout"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles/checkout.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="thankspage" extends="devCodeBase" >
+	<put-attribute name="title" value="Thanks for your purchase"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles/thankspage.jsp"></put-attribute>
+	</definition>
+	
+    <definition name="purchasingerror" extends="devCodeBase" >
+	<put-attribute name="title" value="Purchase Error"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles//purchasingerror.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>
