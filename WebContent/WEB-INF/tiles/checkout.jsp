@@ -103,7 +103,7 @@
 				
 				
 			       
-			       <sf:form action="" method="POST" commandName="creditcard">
+			       <sf:form action="${pageContext.request.contextPath}/verifycustomerpurchase" method="POST" commandName="creditcard">
 					
 						<table class="table">
 						  

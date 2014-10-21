@@ -38,7 +38,7 @@
 								<sf:form method="GET"
 									action="${pageContext.request.contextPath}/addtocart">
 
-									<input id="txtboxToFilter" name="qty" value="0" size="4" />
+									<input id="txtboxToFilter" name="qty" value="1" size="4" />
 									<input type="hidden" name="productId" value="${product.id}">
 									<input class="btn btn-xs btn-success" type="submit"
 										value="add to cart">

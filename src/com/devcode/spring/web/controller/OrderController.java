@@ -96,12 +96,10 @@ public class OrderController {
 		orderService.calculateCart(cart);
 		
 		if(paymentService.verifyCard(customerCreditcard) == true){
-			
-			
+	
 			String customer = SecurityContextHolder.getContext().getAuthentication().getName();
             orderService.submitOrder(cart,customer);
-			
-			
+
 			return "thankspage";
 		}
 		
@@ -125,11 +123,8 @@ public class OrderController {
 		customerBank.setAmount(amount);
 		
 		paymentService.bankPayment(customerBank);
-		
-//		String customer = SecurityContextHolder.getContext().getAuthentication().getName();
-//        orderService.submitOrder(cart,customer);
-		
-		return "https://test.trustly.com/_/deposit.php?SessionID=7d5d96ab-db27-4db2-8939-b2180a3c1169&OrderID=2605177603&Locale=en";
+	
+		return "/redirect";
 	}
 	
 

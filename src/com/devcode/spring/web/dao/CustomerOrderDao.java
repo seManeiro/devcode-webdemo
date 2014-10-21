@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Component("customerOrderDao")
 public class CustomerOrderDao {
 
+	
+	
 	@Autowired
 	private SessionFactory sessionfactory;
 
@@ -75,9 +77,21 @@ public class CustomerOrderDao {
 		customerOrder.setDateOrderPlaced(new Date());
 		customerOrder.setTotalPrice(cart.getTotalPrice());
 		customerOrder.setOredrNumber(UUID.randomUUID().toString());
+		String lastOrderNumber = customerOrder.getOredrNumber();
 		
 		session().save(customerOrder);
+        
+		List<OrderLine> orderLines = (List<OrderLine>) cart.getOrderLines();
+		
+		for(OrderLine orderLine : orderLines){
+			orderLine.setOrderId(lastOrderNumber);
+			session().save(orderLine);
+		}
+	
+	
 	}
+
+	
 
 
 }

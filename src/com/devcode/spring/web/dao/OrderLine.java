@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 @Entity
-@Table(name = "orderlines")
+@Table(name = "orderline")
 public class OrderLine {
 
 	@Id
@@ -19,8 +19,12 @@ public class OrderLine {
 	@Column(name = "quantity")
 	private int quantity;
 
-	@ManyToOne
-	@JoinColumn(name = "orderId")
+//	@ManyToOne
+//	@JoinColumn(name = "orderId")
+	@Column (name = "orderId")
+	private String orderId;
+	
+	@Transient
 	private CustomerOrder customerOrder;
 
 //	@ManyToOne
@@ -36,18 +40,28 @@ public class OrderLine {
 	
 
 	public OrderLine(int id, double price, int quantity,
-			CustomerOrder customerOrder, int productId ) {
+			String orderId, int productId ) {
 	
 		
 		this.id = id;
 		this.price = price;
 		this.quantity = quantity;
-		this.customerOrder = customerOrder;
+		this.orderId = orderId;
 		this.productId = productId;
 		
 	}
 
 	
+	
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
 
 
 	public int getProductId() {
