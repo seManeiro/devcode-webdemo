@@ -20,7 +20,7 @@
 						</h3>
 						<br />
 						<h5 class="warning">
-							SEK
+							USD
 							<c:out value="${product.price}"></c:out>
 						</h5>
 						<c:out value="${product.description}"></c:out>

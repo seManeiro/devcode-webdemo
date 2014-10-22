@@ -16,7 +16,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import com.devcode.spring.web.dao.CustomerBank;
 import com.devcode.spring.web.dao.CustomerCreditcard;
 import com.devcode.spring.web.dao.CustomerOrder;
-import com.devcode.spring.web.resources.CustomerResource;
 import com.devcode.spring.web.service.OrderService;
 import com.devcode.spring.web.service.PaymentService;
 
@@ -121,10 +120,8 @@ public class OrderController {
 		double totalAmount = cart.getTotalPrice();
 		String amount = Double.toString(totalAmount);
 		customerBank.setAmount(amount);
-		
-		paymentService.bankPayment(customerBank);
-	
-		return "/redirect";
+
+		return paymentService.bankPayment(customerBank);
 	}
 	
 

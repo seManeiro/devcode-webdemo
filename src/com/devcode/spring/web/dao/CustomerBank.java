@@ -6,7 +6,7 @@ public class CustomerBank {
 
 	private String userId;
 
-	private String merchantId = "1";
+	private String merchantId = "4711";
 
 	private String amount;
 	

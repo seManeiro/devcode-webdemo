@@ -35,7 +35,7 @@
 						<h3>${orderline.product.name}</h3>
 						
 						&nbsp; &nbsp; &nbsp;<spam style="color:gray" ><b><mark> ${orderline.quantity}</mark></b></spam> units.
-						<h3 class="warning"> Price ${orderline.product.price}kr</h3>
+						<h3 class="warning"> Price ${orderline.product.price} USD</h3>
 
 						<sf:form method="GET"
 							action="${pageContext.request.contextPath}/remove">
@@ -49,7 +49,7 @@
 			<hr>
 		</c:forEach>
 
-			 <h3 class="tolalprice">&nbsp;Total Price: <spam style="color:gray">${cart.totalPrice}</spam> SEK</h3>
+			 <h3 class="tolalprice">&nbsp;Total Price: <spam style="color:gray">${cart.totalPrice}</spam> USD</h3>
 	
 	</div>
 </div>
