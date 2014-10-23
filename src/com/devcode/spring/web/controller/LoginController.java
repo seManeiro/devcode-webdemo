@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.devcode.spring.service.UsersService;
 import com.devcode.spring.web.dao.FormValidationGroup;
 import com.devcode.spring.web.dao.User;
-import com.devcode.spring.web.service.UsersService;
 
 @Controller
 public class LoginController {

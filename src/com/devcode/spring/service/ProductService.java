@@ -1,4 +1,4 @@
-package com.devcode.spring.web.service;
+package com.devcode.spring.service;
 
 import java.util.List;
 

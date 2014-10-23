@@ -1,4 +1,4 @@
-package com.devcode.spring.web.dao;
+package com.devcode.spring.web.dao.ws;
 
 
 import javax.xml.bind.annotation.XmlRootElement;

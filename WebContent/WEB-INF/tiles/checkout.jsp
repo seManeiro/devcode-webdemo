@@ -93,17 +93,17 @@
 		<div class="container">
 			<sec:authorize access="isAuthenticated()">
 				
-				<h3 align="center">Payment Methods</h3>
+				<h3 align="center" style="color:gray">Payment Methods</h3>
 
 <button id="creditCard" class="btn btn-default navbar-btn" type="button">Creditcard</button>
 
 <a id="bank" class="btn btn-default navbar-btn" type="button" href="${pageContext.request.contextPath}/bankPayment" >Bank</a>
 
+<button id="paypal" class="btn btn-default navbar-btn" type="button">PayPal</button>
+
 				<div id="target1" style="display: none">
 				
-				
-			       
-			       <sf:form action="${pageContext.request.contextPath}/verifycustomerpurchase" method="POST" commandName="creditcard">
+           	       <sf:form action="${pageContext.request.contextPath}/verifycustomerpurchase" method="POST" commandName="creditcard">
 					
 						<table class="table">
 						  
@@ -192,11 +192,37 @@
 	</div>
 
 </div>
+
+<div id="target2" style="display: none">
+				
+           	       <sf:form action="${pageContext.request.contextPath}/PayPalPayment" method="POST" commandName="paypal">
+           	             
+           	             <table class="table">
+						  
+							  <tr class="">
+									<th>PayPal Username:</th>
+									<td>
+									
+									<sf:input path="amount" name="amount" type="hidden" value="${cart.totalPrice}"/><br />
+										<sf:input path="userId" name="userId" type="hidden" value='${principal.username}'/><br />
+									    <sf:input class="input-sm" path="email" name="email" type="text" /><br /> 
+									   <sf:errors path="email" cssClass="error"></sf:errors>
+								   </td>
+							</tr>
+							<tr>
+							        <td >
+							        <input style="align:right;" id="submitinput" value="go to PayPal" type="submit" class="btn btn-warning" /> 
+							        </td>    
+						    </tr>					
+						</table>
+					</sf:form>
+</div>
+
 <script>
 	$("#creditCard").click(function() {
 		$("#target1").slideToggle("400");
 	});
-	$("#bank").click(function() {
+	$("#paypal").click(function() {
 		$("#target2").slideToggle("400");
 	});
 </script>

@@ -10,10 +10,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.devcode.spring.service.OrderService;
+import com.devcode.spring.service.ProductService;
 import com.devcode.spring.web.dao.FormValidationGroup;
 import com.devcode.spring.web.dao.Product;
-import com.devcode.spring.web.service.OrderService;
-import com.devcode.spring.web.service.ProductService;
 
 @Controller
 public class productController {

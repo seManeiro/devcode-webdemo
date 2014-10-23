@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import com.devcode.spring.web.dao.CustomerBank;
-import com.devcode.spring.web.dao.CustomerCreditcard;
+import com.devcode.spring.service.OrderService;
+import com.devcode.spring.service.PaymentService;
 import com.devcode.spring.web.dao.CustomerOrder;
-import com.devcode.spring.web.service.OrderService;
-import com.devcode.spring.web.service.PaymentService;
+import com.devcode.spring.web.dao.ws.CustomerBank;
+import com.devcode.spring.web.dao.ws.CustomerCreditcard;
+import com.devcode.spring.web.dao.ws.CustomerPayPal;
 
 @Controller
 public class OrderController {
@@ -75,6 +76,7 @@ public class OrderController {
 		orderService.calculateCart(cart);
 		model.addAttribute("cart", cart);
 		model.addAttribute("creditcard", new CustomerCreditcard());
+		model.addAttribute("paypal", new CustomerPayPal());
 
 		return "checkout";
 
@@ -124,6 +126,27 @@ public class OrderController {
 		return paymentService.bankPayment(customerBank);
 	}
 	
+	@RequestMapping(value = "/PayPalPayment", method = RequestMethod.POST)
+	public String PayPalPayment(HttpServletRequest request,Model model, @Valid CustomerPayPal customerPayPal, BindingResult result) {
+
+		if (result.hasErrors()) {
+
+			return "checkout";
+
+		}
+		customerPayPal.setSessionId(RequestContextHolder.currentRequestAttributes().getSessionId());
+		customerPayPal.setUserId(SecurityContextHolder.getContext().getAuthentication().getName());
+	
+		CustomerOrder cart = getCurrentCart(request);
+		orderService.calculateCart(cart);
+		double totalAmount = cart.getTotalPrice();
+		String amount = Double.toString(totalAmount);
+		customerPayPal.setAmount(amount);
+		
+		return paymentService.payPalPayment(customerPayPal);
+				
+		
+	}
 
 	@RequestMapping("/cart")
 	public String showCart(HttpServletRequest request, Model model) {
