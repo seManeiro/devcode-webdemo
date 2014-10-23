@@ -1,13 +1,7 @@
 package com.devcode.spring.service;
 
-import java.io.IOException;
-import java.util.Map;
-
 import javax.ws.rs.core.MediaType;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -47,7 +41,7 @@ public class PaymentService {
 
 			if (jsonOutput.has("errors")) {
 				throw new RuntimeException("Failed : "
-						+ jsonOutput.getString("error_message"));
+						+ jsonOutput.getString("errors"));
 			}
 
 			boolean success = jsonOutput.getBoolean("success");
@@ -86,7 +80,7 @@ public class PaymentService {
 
 			if (jsonOutput.has("errors")) {
 
-				throw new RuntimeException("Failed : "+jsonOutput.getString("success")+ jsonOutput.getString("error_message"));
+				throw new RuntimeException("Failed : "+ jsonOutput.getString("msg"));
 			}
 
 			String url = jsonOutput.getString("url");
@@ -118,7 +112,7 @@ public class PaymentService {
 			System.out.println(jsonOutput);
 
 			if (jsonOutput.has("errors")) {	
-				throw new RuntimeException("Failed : "+jsonOutput.getString("success"));	
+				throw new RuntimeException("Failed : "+jsonOutput.getString("errors"));	
 			}
 			
 			String url = jsonOutput.getString("url");

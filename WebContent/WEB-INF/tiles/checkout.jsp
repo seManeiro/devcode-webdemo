@@ -99,11 +99,11 @@
 
 <a id="bank" class="btn btn-default navbar-btn" type="button" href="${pageContext.request.contextPath}/bankPayment" >Bank</a>
 
-<button id="paypal" class="btn btn-default navbar-btn" type="button">PayPal</button>
+<a  id="paypal" class="btn btn-default navbar-btn" type="button" href="${pageContext.request.contextPath}/paypal">PayPal</a>
 
 				<div id="target1" style="display: none">
 				
-           	       <sf:form action="${pageContext.request.contextPath}/verifycustomerpurchase" method="POST" commandName="creditcard">
+           	       <sf:form action="${pageContext.request.contextPath}/verifyCustomerCreditcard" method="POST" commandName="customerCreditcard">
 					
 						<table class="table">
 						  
@@ -193,9 +193,9 @@
 
 </div>
 
-<div id="target2" style="display: none">
+<%-- <div id="target2" style="display: none">
 				
-           	       <sf:form action="${pageContext.request.contextPath}/PayPalPayment" method="POST" commandName="paypal">
+           	       <sf:form action="${pageContext.request.contextPath}/PayPalPayment" method="POST" commandName="customerPayPal">
            	             
            	             <table class="table">
 						  
@@ -216,14 +216,12 @@
 						    </tr>					
 						</table>
 					</sf:form>
-</div>
+</div> --%>
 
 <script>
 	$("#creditCard").click(function() {
 		$("#target1").slideToggle("400");
 	});
-	$("#paypal").click(function() {
-		$("#target2").slideToggle("400");
-	});
+
 </script>
 

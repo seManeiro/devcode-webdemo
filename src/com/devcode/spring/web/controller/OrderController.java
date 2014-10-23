@@ -1,13 +1,16 @@
 package com.devcode.spring.web.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +19,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import com.devcode.spring.service.OrderService;
 import com.devcode.spring.service.PaymentService;
 import com.devcode.spring.web.dao.CustomerOrder;
+import com.devcode.spring.web.dao.FormValidationGroup;
 import com.devcode.spring.web.dao.ws.CustomerBank;
 import com.devcode.spring.web.dao.ws.CustomerCreditcard;
 import com.devcode.spring.web.dao.ws.CustomerPayPal;
@@ -75,18 +79,31 @@ public class OrderController {
 		CustomerOrder cart = getCurrentCart(request);
 		orderService.calculateCart(cart);
 		model.addAttribute("cart", cart);
-		model.addAttribute("creditcard", new CustomerCreditcard());
-		model.addAttribute("paypal", new CustomerPayPal());
+		model.addAttribute("customerCreditcard", new CustomerCreditcard());
+		model.addAttribute("customerPayPal", new CustomerPayPal());
 
 		return "checkout";
 
 	}
+	
+	@RequestMapping("/paypal")
+	public String payPal(HttpServletRequest request, Model model) {
 
-	@RequestMapping(value = "/verifycustomerpurchase", method = RequestMethod.POST)
-	public String verifyCustomer(HttpServletRequest request,Model model, @Valid CustomerCreditcard customerCreditcard, BindingResult result) {
+		CustomerOrder cart = getCurrentCart(request);
+		orderService.calculateCart(cart);
+		model.addAttribute("cart", cart);
+		model.addAttribute("customerCreditcard", new CustomerCreditcard());
+		model.addAttribute("customerPayPal", new CustomerPayPal());
 
-		if (result.hasErrors()) {
+		return "paypal";
 
+	}
+
+	@RequestMapping(value = "/verifyCustomerCreditcard", method = RequestMethod.POST)
+	public String verifyCustomerCreditcard(HttpServletRequest request,Model model, @Validated(FormValidationGroup.class) CustomerCreditcard customerCreditcard, 
+			BindingResult result) {
+
+		if (result.hasErrors()) {		
 			return "checkout";
 
 		}
@@ -112,7 +129,7 @@ public class OrderController {
 	}
 	
 	@RequestMapping("/bankPayment")
-	public String bankPayment(HttpServletRequest request,Model model,CustomerBank customerBank, BindingResult result) {
+	public String bankPayment(HttpServletRequest request,Model model,@Validated(FormValidationGroup.class) CustomerBank customerBank, BindingResult result) {
 		
 		customerBank.setSessionId(RequestContextHolder.currentRequestAttributes().getSessionId());
 		customerBank.setUserId(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -127,11 +144,11 @@ public class OrderController {
 	}
 	
 	@RequestMapping(value = "/PayPalPayment", method = RequestMethod.POST)
-	public String PayPalPayment(HttpServletRequest request,Model model, @Valid CustomerPayPal customerPayPal, BindingResult result) {
+	public String PayPalPayment(HttpServletRequest request,Model model, @Validated(FormValidationGroup.class) CustomerPayPal customerPayPal, BindingResult result) {
 
 		if (result.hasErrors()) {
 
-			return "checkout";
+			return "paypal";
 
 		}
 		customerPayPal.setSessionId(RequestContextHolder.currentRequestAttributes().getSessionId());
@@ -144,8 +161,7 @@ public class OrderController {
 		customerPayPal.setAmount(amount);
 		
 		return paymentService.payPalPayment(customerPayPal);
-				
-		
+	
 	}
 
 	@RequestMapping("/cart")

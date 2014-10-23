@@ -1,7 +1,13 @@
 package com.devcode.spring.web.dao.ws;
 
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.hibernate.validator.constraints.CreditCardNumber;
+
+import com.devcode.spring.web.dao.FormValidationGroup;
 
 @XmlRootElement
 public class CustomerCreditcard {
@@ -15,19 +21,22 @@ public class CustomerCreditcard {
 	
 	private String merchantId = "4711";
 	
-	
+	@NotNull
 	private String amount;
 	
-	
+	@NotNull
 	private String cardHolder;
 	
-	
+	@CreditCardNumber(groups={FormValidationGroup.class},message=" Invalid Creditcard number")
 	private String creditcardNumber;
 	
+	@NotNull
 	private String expiryMonth;
 	
+	@NotNull
 	private String expiryYear;
-		
+	
+	@Size(min=3,max=3,groups={FormValidationGroup.class})
 	private String cvv;
 
 	public CustomerCreditcard() {

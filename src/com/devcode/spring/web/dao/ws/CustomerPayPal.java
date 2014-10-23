@@ -1,5 +1,7 @@
 package com.devcode.spring.web.dao.ws;
 
+import org.hibernate.validator.constraints.Email;
+
 public class CustomerPayPal {
 	
 	private String sessionId;
@@ -10,6 +12,7 @@ public class CustomerPayPal {
 
 	private String amount;
 	
+	@Email(message="Not a valid email")
 	private String email;
 
 	public CustomerPayPal(){

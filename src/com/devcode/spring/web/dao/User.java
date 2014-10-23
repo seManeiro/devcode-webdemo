@@ -1,8 +1,5 @@
 package com.devcode.spring.web.dao;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,7 +9,6 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="users")

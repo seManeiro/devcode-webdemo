@@ -30,6 +30,7 @@
 		<security:intercept-url pattern="/createaccount" access="hasRole('ROLE_ADMIN')" />
 		<security:intercept-url pattern="/resources/**" access="permitAll" />
 		<security:intercept-url pattern="/" access="permitAll" />
+		<security:intercept-url pattern="/paypal" access="permitAll" />
 		<security:intercept-url pattern="/home" access="permitAll" />
 		<security:intercept-url pattern="/bankPayment" access="permitAll" />
 		<security:intercept-url pattern="/purchasingerror" access="permitAll" />
