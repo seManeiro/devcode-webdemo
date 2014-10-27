@@ -8,9 +8,9 @@
            	       <sf:form action="${pageContext.request.contextPath}/PayPalPayment" method="POST" commandName="customerPayPal">
            	             
            	             <table class="table">
-						  
+						   <h4 align="center" style="color:gray;">PayPal</h4>
 							  <tr class="">
-									<th>PayPal Username:</th>
+									<th><small style="color:red;">(PayPal) </small> Username:</th>
 									<td>
 									
 									<sf:input path="amount" name="amount" type="hidden" value="${cart.totalPrice}"/><br />
@@ -21,7 +21,7 @@
 							</tr>
 							<tr>
 							        <td >
-							        <input style="align:right;" id="submitinput" value="go to PayPal" type="submit" class="btn btn-warning" /> 
+							        <input style="align:right;" id="submitinput" value="proceed" type="submit" class="btn btn-warning" /> 
 							        </td>    
 						    </tr>					
 						</table>

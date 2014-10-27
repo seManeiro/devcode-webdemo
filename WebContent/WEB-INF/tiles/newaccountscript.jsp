@@ -10,7 +10,12 @@
 		$("#password").keyup(checkPasswordMatch);
 		$("#comfirmpass").keyup(checkPasswordMatch);
 
-		$("#details").submit(canSubmit);
+		$("#details").submit(canSubmit,setDob);
+		
+		
+		
+		
+		
 	}
 
 	function canSubmit() {
@@ -23,6 +28,7 @@
 			return false;
 		} else {
 			return true;
+			
 		}
 
 	}
@@ -47,12 +53,12 @@
 	}
 
 	$(document).ready(onload);
+	
 	function setDob(){
-		var year = $( "#years" ).text();
-		var months = $( "#months" ).text();
-		var days = $( "#days" ).text();
 		
-		$("#dob").append(year+'-'+mouth+'-'+days);
+		$('#dob').val($('#years').val() + '-' +
+                $('#months').val() + '-' +
+                $('#days').val());
 	}
 	
 	

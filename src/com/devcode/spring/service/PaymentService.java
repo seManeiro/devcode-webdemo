@@ -29,14 +29,11 @@ public class PaymentService {
 
 		WebResource webResource = client
 				.resource("http://test.paymentiq.biz:8080/paymentiq/api/creditcard/deposit/process");
-		ClientResponse response = webResource.type(
-				MediaType.APPLICATION_JSON_TYPE).post(ClientResponse.class,
-				json);
+		ClientResponse response = webResource.type(MediaType.APPLICATION_JSON_TYPE).post(ClientResponse.class,json);
 
 		try {
 
-			JSONObject jsonOutput = new JSONObject(
-					response.getEntity(String.class));
+			JSONObject jsonOutput = new JSONObject(response.getEntity(String.class));
 			System.out.println(jsonOutput);
 
 			if (jsonOutput.has("errors")) {
@@ -70,20 +67,18 @@ public class PaymentService {
 			String json = gson.toJson(customerBank);
 			System.out.println(json);
 
-			WebResource webResource = client
-					.resource("http://test.paymentiq.biz:8080/paymentiq/api/bank/deposit/process");
-			ClientResponse response = webResource.type(
-					MediaType.APPLICATION_JSON_TYPE).post(ClientResponse.class,
-					json);
-			JSONObject jsonOutput = new JSONObject(
-					response.getEntity(String.class));
+			WebResource webResource = client.resource("http://test.paymentiq.biz:8080/paymentiq/api/bank/deposit/process");
+			ClientResponse response = webResource.type(MediaType.APPLICATION_JSON_TYPE).post(ClientResponse.class,json);
+			JSONObject jsonOutput = new JSONObject(response.getEntity(String.class));
 
+			System.out.println(jsonOutput);
+			
 			if (jsonOutput.has("errors")) {
 
 				throw new RuntimeException("Failed : "+ jsonOutput.getString("msg"));
 			}
 
-			String url = jsonOutput.getString("url");
+			String url = jsonOutput.getString("url");		 
 
 			System.out.println(url);
 
@@ -94,8 +89,7 @@ public class PaymentService {
 		
 
 		return "purchasingerror";
-		// String redirectUrl = "http://www.yahoo.com";
-		// return "redirect:" + redirectUrl;
+		
 		}
 	}
 
