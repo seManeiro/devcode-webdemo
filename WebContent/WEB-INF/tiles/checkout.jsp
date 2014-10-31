@@ -97,7 +97,7 @@
 
 <button id="creditCard" class="btn btn-default navbar-btn" type="button">Creditcard</button>
 
-<a id="bank" class="btn btn-default navbar-btn" type="button" href="${pageContext.request.contextPath}/bankPayment" >Bank</a>
+<a id="bank" class="btn btn-default navbar-btn" onclick="setIframe(this,'${paymentService.url}')" type="button" href="${pageContext.request.contextPath}/bankPayment" >Bank</a>
 
 <a  id="paypal" class="btn btn-default navbar-btn" type="button" href="${pageContext.request.contextPath}/paypal">PayPal</a>
 
@@ -193,35 +193,15 @@
 
 </div>
 
-<%-- <div id="target2" style="display: none">
-				
-           	       <sf:form action="${pageContext.request.contextPath}/PayPalPayment" method="POST" commandName="customerPayPal">
-           	             
-           	             <table class="table">
-						  
-							  <tr class="">
-									<th>PayPal Username:</th>
-									<td>
-									
-									<sf:input path="amount" name="amount" type="hidden" value="${cart.totalPrice}"/><br />
-										<sf:input path="userId" name="userId" type="hidden" value='${principal.username}'/><br />
-									    <sf:input class="input-sm" path="email" name="email" type="text" /><br /> 
-									   <sf:errors path="email" cssClass="error"></sf:errors>
-								   </td>
-							</tr>
-							<tr>
-							        <td >
-							        <input style="align:right;" id="submitinput" value="go to PayPal" type="submit" class="btn btn-warning" /> 
-							        </td>    
-						    </tr>					
-						</table>
-					</sf:form>
-</div> --%>
-
 <script>
 	$("#creditCard").click(function() {
 		$("#target1").slideToggle("400");
 	});
 
+	function setIframe(element,location){
+	    var theIframe = document.createElement("iframe");
+	    theIframe.src = location;
+	   element.appendChild(theIframe);
+	}
 </script>
 

@@ -23,17 +23,17 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/se/Documents/java-json.jar"/>
-	<classpathentry kind="lib" path="C:/Users/se/Desktop/jersey-archive-1.18/lib/asm-3.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/se/Desktop/jersey-archive-1.18/lib/jackson-core-asl-1.9.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/se/Desktop/jersey-archive-1.18/lib/jackson-jaxrs-1.9.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/se/Desktop/jersey-archive-1.18/lib/jackson-mapper-asl-1.9.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/se/Desktop/jersey-archive-1.18/lib/jackson-xc-1.9.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/se/Desktop/jersey-archive-1.18/lib/jersey-client-1.18.jar"/>
-	<classpathentry kind="lib" path="C:/Users/se/Desktop/jersey-archive-1.18/lib/jersey-core-1.18.jar"/>
-	<classpathentry kind="lib" path="C:/Users/se/Desktop/jersey-archive-1.18/lib/jersey-json-1.18.jar"/>
-	<classpathentry kind="lib" path="C:/Users/se/Desktop/jersey-archive-1.18/lib/jersey-server-1.18.jar"/>
-	<classpathentry kind="lib" path="C:/Users/se/Desktop/jersey-archive-1.18/lib/jersey-servlet-1.18.jar"/>
-	<classpathentry kind="lib" path="C:/Users/se/Desktop/jersey-archive-1.18/lib/jettison-1.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/se/Desktop/jersey-archive-1.18/lib/jsr311-api-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/se/workspace/devcode/devcode-webdemo-9/jsonLib/asm-3.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/se/workspace/devcode/devcode-webdemo-9/jsonLib/jackson-core-asl-1.9.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/se/workspace/devcode/devcode-webdemo-9/jsonLib/jackson-jaxrs-1.9.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/se/workspace/devcode/devcode-webdemo-9/jsonLib/jackson-mapper-asl-1.9.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/se/workspace/devcode/devcode-webdemo-9/jsonLib/jackson-xc-1.9.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/se/workspace/devcode/devcode-webdemo-9/jsonLib/jersey-client-1.18.jar"/>
+	<classpathentry kind="lib" path="C:/Users/se/workspace/devcode/devcode-webdemo-9/jsonLib/jersey-core-1.18.jar"/>
+	<classpathentry kind="lib" path="C:/Users/se/workspace/devcode/devcode-webdemo-9/jsonLib/jersey-json-1.18.jar"/>
+	<classpathentry kind="lib" path="C:/Users/se/workspace/devcode/devcode-webdemo-9/jsonLib/jersey-server-1.18.jar"/>
+	<classpathentry kind="lib" path="C:/Users/se/workspace/devcode/devcode-webdemo-9/jsonLib/jersey-servlet-1.18.jar"/>
+	<classpathentry kind="lib" path="C:/Users/se/workspace/devcode/devcode-webdemo-9/jsonLib/jettison-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/se/workspace/devcode/devcode-webdemo-9/jsonLib/jsr311-api-1.1.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

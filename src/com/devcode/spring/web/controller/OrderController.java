@@ -143,6 +143,15 @@ public class OrderController {
 		return paymentService.bankPayment(customerBank);
 	}
 	
+	@RequestMapping("/bankLink")
+	public String bankLink(HttpServletRequest request) {
+		
+		return "thankspage";
+
+	}
+	
+	
+	
 	@RequestMapping(value = "/PayPalPayment", method = RequestMethod.POST)
 	public String PayPalPayment(HttpServletRequest request,Model model, @Validated(FormValidationGroup.class) CustomerPayPal customerPayPal, BindingResult result) {
 
