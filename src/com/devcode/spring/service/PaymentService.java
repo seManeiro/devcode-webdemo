@@ -1,15 +1,24 @@
 package com.devcode.spring.service;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import com.devcode.spring.web.dao.CustomerOrderDao;
 import com.devcode.spring.web.dao.ws.CustomerBank;
 import com.devcode.spring.web.dao.ws.CustomerCreditcard;
 import com.devcode.spring.web.dao.ws.CustomerPayPal;
 import com.google.gson.Gson;
+import com.seamless.ers.interfaces.external.AcknowledgmentMode;
+import com.seamless.ers.interfaces.external.ClientContext;
+import com.seamless.ers.interfaces.external.Invoice;
+import com.seamless.ers.interfaces.external.PaymentMode;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
@@ -21,6 +30,7 @@ public class PaymentService {
 
 	private String url;
 	private Client client = Client.create();
+	private Calendar calendar = new GregorianCalendar();
 
 	public boolean verifyCard(CustomerCreditcard customerCreditcard) {
 
@@ -138,5 +148,34 @@ public class PaymentService {
 			e.printStackTrace();
 			return "purchasingerror";
 		}
+	}
+	
+	public void QRPayment(){
+		
+	}
+	
+	public Invoice createInvoice(Invoice invoice){
+		AcknowledgmentMode ack = null;
+		PaymentMode paymentmode = null;
+		invoice.setAcknowledgmentMode(ack);
+		invoice.setBackURL("thankspage");
+		invoice.setClientInvoiceId("Merchant34213421");
+		invoice.setFooter("RFC:12389234DKJ3");
+		invoice.setInvoiceRows(null);
+		invoice.setIssueDate(calendar);
+		invoice.setPaymentMode(paymentmode);
+		invoice.setTitle("DEVCODE WEBSHOP");
+		
+	return invoice;
+	}
+
+	public ClientContext addClientContext(ClientContext clientContext) {
+		clientContext.setClientId("POS Version 3.4.1");
+		clientContext.setChannel("ClientWS");
+		clientContext.setClientComment(null);
+		clientContext.setPassword("1234Qwer");
+		clientContext.setClientRequestTimeout(0);
+	
+		return clientContext;
 	}
 }
