@@ -7,7 +7,7 @@
 
 package com.seamless.ers.interfaces.external;
 
-public class PaymentInvoiceRow  implements java.io.Serializable {
+public class PaymentInvoiceRow implements java.io.Serializable {
     private java.lang.String itemDescription;
 
     private com.seamless.ers.interfaces.external.Amount itemDiscount;

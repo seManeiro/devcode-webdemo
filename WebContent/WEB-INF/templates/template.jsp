@@ -8,6 +8,7 @@
 <link href="${pageContext.request.contextPath}/resources/css/jumbotron.css" rel="stylesheet" type="text/css" />
 <link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet" type="text/css" />
 <link href="${pageContext.request.contextPath}/resources/css/carousel.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="//cdn.seqr.com/webshop-plugin/css/seqrShop.css">
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/angular.js"></script>

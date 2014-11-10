@@ -31,6 +31,8 @@
 		<security:intercept-url pattern="/resources/**" access="permitAll" />
 		<security:intercept-url pattern="/" access="permitAll" />
 		<security:intercept-url pattern="/paypal" access="permitAll" />
+		<security:intercept-url pattern="/qrcodepayment" access="permitAll" />
+		<security:intercept-url pattern="/sendinvoice" access="permitAll" />
 		<security:intercept-url pattern="/home" access="permitAll" />
 		<security:intercept-url pattern="/bankPayment" access="permitAll" />
 		<security:intercept-url pattern="/purchasingerror" access="permitAll" />

@@ -7,6 +7,8 @@
 
 package com.seamless.ers.interfaces.external;
 
+import freemarker.core.ReturnInstruction.Return;
+
 public class AcknowledgmentMode implements java.io.Serializable {
     private java.lang.String _value_;
     private static java.util.HashMap _table_ = new java.util.HashMap();
@@ -69,4 +71,8 @@ public class AcknowledgmentMode implements java.io.Serializable {
         return typeDesc;
     }
 
+    public String getAcknowledgmentMode(){
+    	return "NO_ACKNOWLEDGMENT";
+    }
+    
 }

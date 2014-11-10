@@ -101,6 +101,8 @@
 
 <a  id="paypal" class="btn btn-default navbar-btn" type="button" href="${pageContext.request.contextPath}/paypal">PayPal</a>
 
+<a  id="paypal" class="btn btn-default navbar-btn" type="button" href="${pageContext.request.contextPath}/qrcodepayment">SEQR</a>
+
 				<div id="target1" style="display: none">
 				
            	       <sf:form action="${pageContext.request.contextPath}/verifyCustomerCreditcard" method="POST" commandName="customerCreditcard">
