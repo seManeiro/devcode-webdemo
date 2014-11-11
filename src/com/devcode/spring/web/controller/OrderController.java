@@ -1,5 +1,10 @@
 package com.devcode.spring.web.controller;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -123,14 +128,14 @@ public class OrderController {
 
 	}
 
-	@RequestMapping("/sendinvoice")
-	public String SendInvoiceSEQR(HttpServletRequest request) {
-
-		return "qrcodepayment";
-	}
+//	@RequestMapping("/sendinvoice")
+//	public String SendInvoiceSEQR(HttpServletRequest request) {
+//
+//		return "qrcodepayment";
+//	}
 
 	
-	@RequestMapping("/qrcodepayment")
+	@RequestMapping("/qrsepayment")
 	public String sEQRPayment(HttpServletRequest request, Model model) {
 
 		CustomerOrder cart = getCurrentCart(request);
@@ -139,14 +144,14 @@ public class OrderController {
 		try {
 			
 			ErswsSendInvoiceResponse invoiceResponse = paymentService.sendInvoice(cart);
-            paymentService.generateQRCode(invoiceResponse);
+			FileOutputStream qrCode = paymentService.generateQRCode(invoiceResponse);
+			
+			model.addAttribute("qrcode", qrCode);
 					
 //			String customer = SecurityContextHolder.getContext().getAuthentication().getName();
 //			orderService.submitOrder(cart, customer);
-				return "qrsepayment";
-				
-			
-		
+            	return null;	
+            	
 		} catch (MalformedURLException e) {
 			
 			e.printStackTrace();

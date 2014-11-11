@@ -105,24 +105,18 @@ public class PaymentService {
 			String json = gson.toJson(customerBank);
 			System.out.println(json);
 
-			WebResource webResource = client
-					.resource("http://test.paymentiq.biz:8080/paymentiq/api/bank/deposit/process");
-			ClientResponse response = webResource.type(
-					MediaType.APPLICATION_JSON_TYPE).post(ClientResponse.class,
-					json);
-			JSONObject jsonOutput = new JSONObject(
-					response.getEntity(String.class));
+			WebResource webResource = client.resource("http://test.paymentiq.biz:8080/paymentiq/api/bank/deposit/process");
+			ClientResponse response = webResource.type(MediaType.APPLICATION_JSON_TYPE).post(ClientResponse.class,json);
+			JSONObject jsonOutput = new JSONObject(response.getEntity(String.class));
 
 			System.out.println(jsonOutput);
 
 			if (jsonOutput.has("errors")) {
 
-				throw new RuntimeException("Failed : "
-						+ jsonOutput.getString("msg"));
+				throw new RuntimeException("Failed : " + jsonOutput.getString("msg"));
 			}
 
-			JSONObject redirectOutput = jsonOutput
-					.optJSONObject("redirectOutput");
+			JSONObject redirectOutput = jsonOutput.optJSONObject("redirectOutput");
 
 			this.url = redirectOutput.getString("url");
 
@@ -145,17 +139,13 @@ public class PaymentService {
 			String json = gson.toJson(customerPayPal);
 			System.out.println(json);
 
-			WebResource webResource = client
-					.resource("http://test.paymentiq.biz:8080/paymentiq/api/paypal/deposit/process");
-			ClientResponse response = webResource.type(
-					MediaType.APPLICATION_JSON_TYPE).post(ClientResponse.class,
-					json);
+			WebResource webResource = client.resource("http://test.paymentiq.biz:8080/paymentiq/api/paypal/deposit/process");
+			ClientResponse response = webResource.type(MediaType.APPLICATION_JSON_TYPE).post(ClientResponse.class,json);
 			JSONObject jsonOutput = new JSONObject(response.getEntity(String.class));
 			System.out.println(jsonOutput);
 
 			if (jsonOutput.has("errors")) {
-				throw new RuntimeException("Failed : "
-						+ jsonOutput.getString("errors"));
+				throw new RuntimeException("Failed : "+ jsonOutput.getString("errors"));
 			}
 
 			JSONObject redirectOutput = jsonOutput.optJSONObject("redirectOutput");
@@ -199,28 +189,27 @@ public class PaymentService {
 
 	}
 
-	public void generateQRCode(ErswsSendInvoiceResponse invoiceResponse){
+	public FileOutputStream generateQRCode(ErswsSendInvoiceResponse invoiceResponse){
 		
 		String invoiceQRCode = invoiceResponse.getInvoiceQRCode();
-		ByteArrayOutputStream out = QRCode.from(invoiceQRCode)
-                .to(ImageType.PNG).stream();
-
-				try {
-				FileOutputStream fileOut = new FileOutputStream(new File(
-				"C:\\Users\\se\\workspace\\devcode\\devcode-webdemo-9-ws\\WebContent\\resources\\img\\DEVCODE_QR_Code.PNG"));
+		ByteArrayOutputStream out = QRCode.from(invoiceQRCode).to(ImageType.PNG).stream();
+				
+		       try {
+				
+				FileOutputStream fileOut = new FileOutputStream(new File("C:\\Users\\se\\workspace\\devcode\\devcode-webdemo-9-ws\\WebContent\\resources\\img\\DEVCODE_QR_Code.PNG"));
 				
 				fileOut.write(out.toByteArray());
 				
-				fileOut.flush();
-				fileOut.close();
-				
+				return fileOut;
+		
 			} catch (FileNotFoundException e) {
 				// Do Logging
 				e.printStackTrace();
 			} catch (IOException e) {
 				// Do Logging
 				e.printStackTrace();
-		}	
+		}
+				return null;	
 	}
 		
 		

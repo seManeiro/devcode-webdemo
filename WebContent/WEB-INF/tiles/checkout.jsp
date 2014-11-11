@@ -103,7 +103,7 @@
 
 <a  id="paypal" class="btn btn-default navbar-btn" type="button" href="${pageContext.request.contextPath}/paypal">PayPal</a>
 
-<a  id="paypal" class="btn btn-default navbar-btn" type="button" href="${pageContext.request.contextPath}/qrcodepayment">SEQR</a>
+<a  id="qrcode" class="btn btn-default navbar-btn" href="${pageContext.request.contextPath}/qrsepayment" type="button" >SEQR</a>
 
 				<div id="target1" style="display: none">
 				
@@ -187,8 +187,26 @@
 	
 				    	</table>
 					</sf:form>
-					</div>
+				</div>
 					
+		   <div id="target2" style="display: none">
+				
+						 <table class="table2">
+						   <h4 align="center" style="color:gray;">SEQR payment</h4>
+							  <tr class="">
+							    <h5>Start your SEQR APP and scan this code</h5>
+									
+									<td>
+									
+									<img src="resources/img/DEVCODE_QR_Code.PNG">
+								   </td>
+							</tr>
+							<tr>
+							        
+						    </tr>					
+						</table>
+					
+					</div>			
 					
 			</sec:authorize>
 
@@ -203,8 +221,13 @@
 	function openNewWindow() {
 		window.open("${pageContext.request.contextPath}/bankPayment");
 	}
+	
 	$("#creditCard").click(function() {
 		$("#target1").slideToggle("400");
+	});
+	
+	$("#qrcode").click(function() {
+		$("#target2").slideToggle("400");
 	});
 
 	function setIframe(element, location) {

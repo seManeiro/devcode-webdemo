@@ -5,13 +5,13 @@
 
 <div id="target2" >
 				
-           	       <sf:form action="${pageContext.request.contextPath}/PayPalPayment" method="POST" commandName="customerPayPal">
+           	      
            	             
            	             <table class="table">
 						   <h4 align="center" style="color:gray;">SEQR payment</h4>
 							  <tr class="">
-							    <h5>Start your SEQR app.</h5>
-									<th><small style="color:red;"></small> Scan code:</th>
+							    <h5>Start your SEQR APP and scan this code</h5>
+									
 									<td>
 									
 									<img src="resources/img/DEVCODE_QR_Code.PNG">
@@ -21,6 +21,6 @@
 							        
 						    </tr>					
 						</table>
-					</sf:form>
+					
 </div>
 
