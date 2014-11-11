@@ -1,5 +1,10 @@
 package com.devcode.spring.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.net.MalformedURLException;
@@ -8,11 +13,13 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.ws.rs.core.MediaType;
+
+import net.glxn.qrgen.QRCode;
+import net.glxn.qrgen.image.ImageType;
 
 import org.apache.axis.AxisFault;
 import org.codehaus.jettison.json.JSONException;
@@ -22,22 +29,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import com.devcode.spring.web.dao.CustomerOrder;
-import com.devcode.spring.web.dao.CustomerOrderDao;
 import com.devcode.spring.web.dao.OrderLine;
 import com.devcode.spring.web.dao.Product;
 import com.devcode.spring.web.dao.ws.CustomerBank;
 import com.devcode.spring.web.dao.ws.CustomerCreditcard;
 import com.devcode.spring.web.dao.ws.CustomerPayPal;
 import com.google.gson.Gson;
-import com.mysql.fabric.xmlrpc.base.Array;
 import com.seamless.cashregister.externalclientservice.ERSWSExternalClientServiceImplServiceSoapBindingStub;
-import com.seamless.ers.interfaces.external.AcknowledgmentMode;
 import com.seamless.ers.interfaces.external.Amount;
 import com.seamless.ers.interfaces.external.ClientContext;
 import com.seamless.ers.interfaces.external.ErswsSendInvoiceResponse;
 import com.seamless.ers.interfaces.external.Invoice;
 import com.seamless.ers.interfaces.external.PaymentInvoiceRow;
-import com.seamless.ers.interfaces.external.PaymentMode;
 import com.seamless.ers.interfaces.external.PrincipalId;
 import com.seamless.ers.interfaces.external.TestCreateInvoice;
 import com.sun.jersey.api.client.Client;
@@ -125,7 +128,7 @@ public class PaymentService {
 
 			System.out.println(url);
 
-			return "redirect:" + url;
+			return url;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -184,7 +187,6 @@ public class PaymentService {
 
             invoiceResponse = erswsClient.sendInvoice(addClientContext(clientContext),createInvoice(invoice,cart), null);
 			
-//			response =  erswsClient.getPaymentStatus(addClientContext(clientContext), invoiceReference, invoiceVersion)
 			return invoiceResponse;
 
 		} catch (AxisFault e) {
@@ -197,6 +199,32 @@ public class PaymentService {
 
 	}
 
+	public void generateQRCode(ErswsSendInvoiceResponse invoiceResponse){
+		
+		String invoiceQRCode = invoiceResponse.getInvoiceQRCode();
+		ByteArrayOutputStream out = QRCode.from(invoiceQRCode)
+                .to(ImageType.PNG).stream();
+
+				try {
+				FileOutputStream fileOut = new FileOutputStream(new File(
+				"C:\\Users\\se\\workspace\\devcode\\devcode-webdemo-9-ws\\WebContent\\resources\\img\\DEVCODE_QR_Code.PNG"));
+				
+				fileOut.write(out.toByteArray());
+				
+				fileOut.flush();
+				fileOut.close();
+				
+			} catch (FileNotFoundException e) {
+				// Do Logging
+				e.printStackTrace();
+			} catch (IOException e) {
+				// Do Logging
+				e.printStackTrace();
+		}	
+	}
+		
+		
+	
 
 	public ClientContext addClientContext(ClientContext clientContext) {
 		

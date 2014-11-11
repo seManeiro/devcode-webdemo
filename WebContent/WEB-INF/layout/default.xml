@@ -107,9 +107,14 @@
 	<put-attribute name="content" value="/WEB-INF/tiles/paypal.jsp"></put-attribute>
 	</definition>
 	
-	<definition name="qrcodepayment" extends="devCodeBase" >
+	<definition name="paypal" extends="devCodeBase" >
+	<put-attribute name="title" value="PayPal Payment"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles/paypal.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="qrsepayment" extends="devCodeBase" >
 	<put-attribute name="title" value="SEQR Payment"></put-attribute>
-	<put-attribute name="content" value="/WEB-INF/tiles/qrcodepayment.jsp"></put-attribute>
+	<put-attribute name="content" value="/WEB-INF/tiles/qrsepayment.jsp"></put-attribute>
 	</definition>
 	
 </tiles-definitions>

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.devcode.spring.service.OrderService;
 import com.devcode.spring.service.PaymentService;
@@ -138,21 +139,13 @@ public class OrderController {
 		try {
 			
 			ErswsSendInvoiceResponse invoiceResponse = paymentService.sendInvoice(cart);
-			System.out.println("Respueta:"+ invoiceResponse.toString());
-			
-			String invoiceQRCode = invoiceResponse.getInvoiceQRCode();			
-			
-//			QRCode qrCode = new QRCode();
-			
-			model.addAttribute("QRCode", invoiceQRCode);
-			
-			
-			if(true){
-//				String customer = SecurityContextHolder.getContext().getAuthentication().getName();
-//				orderService.submitOrder(cart, customer);
-				return "qrcodepayment";
+            paymentService.generateQRCode(invoiceResponse);
+					
+//			String customer = SecurityContextHolder.getContext().getAuthentication().getName();
+//			orderService.submitOrder(cart, customer);
+				return "qrsepayment";
 				
-			}
+			
 		
 		} catch (MalformedURLException e) {
 			
@@ -164,23 +157,22 @@ public class OrderController {
 
 	}
 	
-	@RequestMapping("/bankPayment")
-	public String bankPayment(HttpServletRequest request, Model model,
-			@Validated(FormValidationGroup.class) CustomerBank customerBank,
-			BindingResult result) {
+	@RequestMapping(value ="/bankPayment",method = RequestMethod.GET)
+	public ModelAndView  bankPayment(HttpServletRequest request, Model model,@Validated(FormValidationGroup.class) CustomerBank customerBank,
+			                           BindingResult result) {
 
-		customerBank.setSessionId(RequestContextHolder
-				.currentRequestAttributes().getSessionId());
-		customerBank.setUserId(SecurityContextHolder.getContext()
-				.getAuthentication().getName());
+		customerBank.setSessionId(RequestContextHolder.currentRequestAttributes().getSessionId());
+		customerBank.setUserId(SecurityContextHolder.getContext().getAuthentication().getName());
 
 		CustomerOrder cart = getCurrentCart(request);
 		orderService.calculateCart(cart);
 		double totalAmount = cart.getTotalPrice();
 		String amount = Double.toString(totalAmount);
 		customerBank.setAmount(amount);
-
-		return paymentService.bankPayment(customerBank);
+//		model.addAttribute("exUrl", new ModelAndView("redirect:" + paymentService.bankPayment(customerBank)));
+		
+		return new ModelAndView("redirect:"+ paymentService.bankPayment(customerBank));
+	
 	}
 
 	@RequestMapping("/bankLink")
@@ -191,7 +183,7 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/PayPalPayment", method = RequestMethod.POST)
-	public String PayPalPayment(
+	public ModelAndView PayPalPayment(
 			HttpServletRequest request,
 			Model model,
 			@Validated(FormValidationGroup.class) CustomerPayPal customerPayPal,
@@ -199,13 +191,11 @@ public class OrderController {
 
 		if (result.hasErrors()) {
 
-			return "paypal";
+			return  new ModelAndView("purchasingerror");
 
 		}
-		customerPayPal.setSessionId(RequestContextHolder
-				.currentRequestAttributes().getSessionId());
-		customerPayPal.setUserId(SecurityContextHolder.getContext()
-				.getAuthentication().getName());
+		customerPayPal.setSessionId(RequestContextHolder.currentRequestAttributes().getSessionId());
+		customerPayPal.setUserId(SecurityContextHolder.getContext().getAuthentication().getName());
 
 		CustomerOrder cart = getCurrentCart(request);
 		orderService.calculateCart(cart);
@@ -213,7 +203,7 @@ public class OrderController {
 		String amount = Double.toString(totalAmount);
 		customerPayPal.setAmount(amount);
 
-		return paymentService.payPalPayment(customerPayPal);
+		 return  new ModelAndView(paymentService.payPalPayment(customerPayPal));
 
 	}
 

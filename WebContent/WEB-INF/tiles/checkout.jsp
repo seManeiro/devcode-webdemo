@@ -97,7 +97,9 @@
 
 <button id="creditCard" class="btn btn-default navbar-btn" type="button">Creditcard</button>
 
-<a id="bank" class="btn btn-default navbar-btn" onclick="setIframe(this,'${paymentService.url}')" type="button" href="${pageContext.request.contextPath}/bankPayment" >Bank</a>
+<%-- <a id="bank" class="btn btn-default navbar-btn" onclick="setIframe(this,'${exUrl}')" type="button" href="${pageContext.request.contextPath}/bankPayment" >Bank</a> --%>
+
+<a  id="bank" class="btn btn-default navbar-btn" type="button" href="javaScript:{openNewWindow();}" >Bank</a>
 
 <a  id="paypal" class="btn btn-default navbar-btn" type="button" href="${pageContext.request.contextPath}/paypal">PayPal</a>
 
@@ -196,14 +198,19 @@
 </div>
 
 <script>
+
+
+	function openNewWindow() {
+		window.open("${pageContext.request.contextPath}/bankPayment");
+	}
 	$("#creditCard").click(function() {
 		$("#target1").slideToggle("400");
 	});
 
-	function setIframe(element,location){
-	    var theIframe = document.createElement("iframe");
-	    theIframe.src = location;
-	   element.appendChild(theIframe);
+	function setIframe(element, location) {
+		var theIframe = document.createElement("iframe");
+		theIframe.src = location;
+		element.appendChild(theIframe);
 	}
 </script>
 

@@ -4,10 +4,6 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-
-
-
-
 	<security:authentication-manager>
 		<security:authentication-provider>
 			<security:jdbc-user-service
@@ -31,7 +27,7 @@
 		<security:intercept-url pattern="/resources/**" access="permitAll" />
 		<security:intercept-url pattern="/" access="permitAll" />
 		<security:intercept-url pattern="/paypal" access="permitAll" />
-		<security:intercept-url pattern="/qrcodepayment" access="permitAll" />
+		<security:intercept-url pattern="/qrsepayment" access="permitAll" />
 		<security:intercept-url pattern="/sendinvoice" access="permitAll" />
 		<security:intercept-url pattern="/home" access="permitAll" />
 		<security:intercept-url pattern="/bankPayment" access="permitAll" />
