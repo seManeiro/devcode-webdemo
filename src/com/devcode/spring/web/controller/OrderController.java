@@ -1,11 +1,8 @@
 package com.devcode.spring.web.controller;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.MalformedURLException;
+import java.rmi.RemoteException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,6 +25,7 @@ import com.devcode.spring.web.dao.FormValidationGroup;
 import com.devcode.spring.web.dao.ws.CustomerBank;
 import com.devcode.spring.web.dao.ws.CustomerCreditcard;
 import com.devcode.spring.web.dao.ws.CustomerPayPal;
+import com.seamless.ers.interfaces.external.ErswsPaymentStatusResponse;
 import com.seamless.ers.interfaces.external.ErswsSendInvoiceResponse;
 
 @Controller
@@ -57,6 +55,7 @@ public class OrderController {
 		if (qty == 0) {
 			return "redirect:/products";
 		}
+		
 		orderService.addProduct(productId, qty, cart);
 		return "redirect:/products";
 
@@ -71,7 +70,7 @@ public class OrderController {
 		cart = new CustomerOrder();
 		request.getSession().setAttribute("cart", cart);
 		return cart;
-	}
+	}	
 
 	@RequestMapping("/checkout")
 	public String checkOut(HttpServletRequest request, Model model) {
@@ -128,30 +127,23 @@ public class OrderController {
 
 	}
 
-//	@RequestMapping("/sendinvoice")
-//	public String SendInvoiceSEQR(HttpServletRequest request) {
-//
-//		return "qrcodepayment";
-//	}
-
 	
 	@RequestMapping("/qrsepayment")
-	public String sEQRPayment(HttpServletRequest request, Model model) {
+	public String sEQRPayment(HttpServletRequest request, Model model) throws RemoteException {
 
 		CustomerOrder cart = getCurrentCart(request);
 		orderService.calculateCart(cart);
 		
-		try {
-			
+		try {			
 			ErswsSendInvoiceResponse invoiceResponse = paymentService.sendInvoice(cart);
 			FileOutputStream qrCode = paymentService.generateQRCode(invoiceResponse);
 			
-			model.addAttribute("qrcode", qrCode);
-					
-//			String customer = SecurityContextHolder.getContext().getAuthentication().getName();
-//			orderService.submitOrder(cart, customer);
-            	return null;	
-            	
+			model.addAttribute("qrcode",qrCode);
+			
+			String redirected = sEQRPaymentConfirmation(invoiceResponse, request);
+			
+			return redirected;
+			
 		} catch (MalformedURLException e) {
 			
 			e.printStackTrace();
@@ -161,6 +153,28 @@ public class OrderController {
 		return "purchasingerror";
 
 	}
+	
+	@RequestMapping("/qrseconfirmation")
+	public String sEQRPaymentConfirmation(ErswsSendInvoiceResponse invoiceResponse, HttpServletRequest request) throws RemoteException {
+		
+		CustomerOrder cart = getCurrentCart(request);
+		orderService.calculateCart(cart);
+		
+		ErswsPaymentStatusResponse response = paymentService.getResponseStatus(invoiceResponse);					
+		
+		boolean status = paymentService.checkPaymentStaus(response);					
+		
+		if (status == true){
+		String customer = SecurityContextHolder.getContext().getAuthentication().getName();
+		orderService.submitOrder(cart, customer);
+        	
+		return "thankspage";	
+		}
+		
+		return "purchasingerror";
+	}
+	
+	
 	
 	@RequestMapping(value ="/bankPayment",method = RequestMethod.GET)
 	public ModelAndView  bankPayment(HttpServletRequest request, Model model,@Validated(FormValidationGroup.class) CustomerBank customerBank,
@@ -174,7 +188,6 @@ public class OrderController {
 		double totalAmount = cart.getTotalPrice();
 		String amount = Double.toString(totalAmount);
 		customerBank.setAmount(amount);
-//		model.addAttribute("exUrl", new ModelAndView("redirect:" + paymentService.bankPayment(customerBank)));
 		
 		return new ModelAndView("redirect:"+ paymentService.bankPayment(customerBank));
 	

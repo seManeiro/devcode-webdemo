@@ -38,6 +38,8 @@ import com.google.gson.Gson;
 import com.seamless.cashregister.externalclientservice.ERSWSExternalClientServiceImplServiceSoapBindingStub;
 import com.seamless.ers.interfaces.external.Amount;
 import com.seamless.ers.interfaces.external.ClientContext;
+import com.seamless.ers.interfaces.external.ErswsPaymentStatusResponse;
+import com.seamless.ers.interfaces.external.ErswsResponse;
 import com.seamless.ers.interfaces.external.ErswsSendInvoiceResponse;
 import com.seamless.ers.interfaces.external.Invoice;
 import com.seamless.ers.interfaces.external.PaymentInvoiceRow;
@@ -171,12 +173,12 @@ public class PaymentService {
 		try {
 			String url = "https://extdev.seqr.com/extclientproxy/service/v2?wsdl";
 			URL endpointURL = new URL(url);
-			ERSWSExternalClientServiceImplServiceSoapBindingStub erswsClient = new ERSWSExternalClientServiceImplServiceSoapBindingStub(endpointURL,null);
+			ERSWSExternalClientServiceImplServiceSoapBindingStub erswsClientSendInvoice = new ERSWSExternalClientServiceImplServiceSoapBindingStub(endpointURL,null);
 
 			ErswsSendInvoiceResponse invoiceResponse  = new ErswsSendInvoiceResponse();
 
-            invoiceResponse = erswsClient.sendInvoice(addClientContext(clientContext),createInvoice(invoice,cart), null);
-			
+            invoiceResponse = erswsClientSendInvoice.sendInvoice(addClientContext(clientContext),createInvoice(invoice,cart), null);
+		
 			return invoiceResponse;
 
 		} catch (AxisFault e) {
@@ -297,6 +299,35 @@ public class PaymentService {
 		}
 		return invoiceRowsList.toArray(new PaymentInvoiceRow[invoiceRowsList
 				.size()]);
+	}
+
+	public ErswsPaymentStatusResponse getResponseStatus(ErswsSendInvoiceResponse invoiceResponse) throws RemoteException {
+		
+		ClientContext clientContext = new ClientContext() ;
+		
+		String invoiceReference = invoiceResponse.getInvoiceReference();           
+        int invoiceVersion= invoiceResponse.getResultCode();
+         
+        ERSWSExternalClientServiceImplServiceSoapBindingStub paymentStatus = new ERSWSExternalClientServiceImplServiceSoapBindingStub();	
+		ErswsPaymentStatusResponse response = paymentStatus.getPaymentStatus(addClientContext(clientContext), invoiceReference, invoiceVersion);
+		
+		
+		response.setResultDescription(invoiceResponse.getResultDescription()); 
+		System.out.println(invoiceResponse.getResultDescription().toString());
+		response.setErsReference(invoiceResponse.getErsReference());
+		response.setResultCode(invoiceResponse.getResultCode());
+		
+		return response;
+	}
+
+	public boolean checkPaymentStaus(ErswsPaymentStatusResponse response) {
+		
+		String result = response.getResultDescription();
+		System.out.println("Result: "+ result);
+		if ( result != "SUCCESS"){
+			return false;
+		}		
+		return true;
 	}
 
 	
