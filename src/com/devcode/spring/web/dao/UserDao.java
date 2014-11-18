@@ -57,12 +57,19 @@ public class UserDao {
 
 		return user != null;
 	}
+	
+	public User getUser(String username) {
+
+		Criteria crit = session().createCriteria(User.class);
+		crit.add(Restrictions.idEq(username));
+		User user = (User) crit.uniqueResult();
+
+		return user;
+	}
 
 	public User getUserByUsername(String username) {
 		
-		return (User) session().createQuery("from User where username=:"+username);
-		
-		
+		return (User) session().createQuery("from User where username=:"+ username);				
 	}
 
 }

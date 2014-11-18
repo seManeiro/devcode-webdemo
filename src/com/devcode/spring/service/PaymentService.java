@@ -301,34 +301,28 @@ public class PaymentService {
 				.size()]);
 	}
 
-	public ErswsPaymentStatusResponse getResponseStatus(ErswsSendInvoiceResponse invoiceResponse) throws RemoteException {
+	public ErswsPaymentStatusResponse getResponseStatus(ErswsSendInvoiceResponse invoiceResponse) throws RemoteException, MalformedURLException {
 		
+		String url = "https://extdev.seqr.com/extclientproxy/service/v2?wsdl";
+		URL endpointURL = new URL(url);
 		ClientContext clientContext = new ClientContext() ;
 		
 		String invoiceReference = invoiceResponse.getInvoiceReference();           
         int invoiceVersion= invoiceResponse.getResultCode();
          
-        ERSWSExternalClientServiceImplServiceSoapBindingStub paymentStatus = new ERSWSExternalClientServiceImplServiceSoapBindingStub();	
+        ERSWSExternalClientServiceImplServiceSoapBindingStub paymentStatus = new ERSWSExternalClientServiceImplServiceSoapBindingStub(endpointURL,null);	
 		ErswsPaymentStatusResponse response = paymentStatus.getPaymentStatus(addClientContext(clientContext), invoiceReference, invoiceVersion);
 		
 		
 		response.setResultDescription(invoiceResponse.getResultDescription()); 
-		System.out.println(invoiceResponse.getResultDescription().toString());
+		System.out.println("invoice response: "+invoiceResponse.getResultDescription().toString());
 		response.setErsReference(invoiceResponse.getErsReference());
 		response.setResultCode(invoiceResponse.getResultCode());
 		
 		return response;
 	}
 
-	public boolean checkPaymentStaus(ErswsPaymentStatusResponse response) {
-		
-		String result = response.getResultDescription();
-		System.out.println("Result: "+ result);
-		if ( result != "SUCCESS"){
-			return false;
-		}		
-		return true;
-	}
+
 
 	
 }

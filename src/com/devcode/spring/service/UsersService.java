@@ -21,7 +21,6 @@ public class UsersService  {
 		this.userDao = userDao;
 	}
 
-	
 	public List<User> getCurrentUsers() {
 		return userDao.getUsersList();
 	}
@@ -50,12 +49,10 @@ public class UsersService  {
 		return userDao.getUsersList();
 	}
 
-
 	
 	public User getCurrentUser(HttpServletRequest request) {
-
-		User user = (User) request.getUserPrincipal();
 		
+		User user = (User) request.getUserPrincipal();
 		if (user == null) {
 			return user = new User();
 		}
@@ -71,6 +68,8 @@ public class UsersService  {
 	        return user;
 	    }
 	
-
+	 public User getUser(String username){
+		 return userDao.getUser(username);
+	 }
 
 }

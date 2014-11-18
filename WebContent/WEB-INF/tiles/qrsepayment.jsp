@@ -17,7 +17,7 @@
 			<td><img src="resources/img/DEVCODE_QR_Code.PNG"></td>
 		</tr>
 		<tr>
-			<td><label>After scaning click <a id="qrcode" class="btn btn-default navbar-btn" href="${pageContext.request.contextPath}/qrseconfirmation"
+			<td><label>After scaning click <a id="qrcode" class="btn btn-default navbar-btn" href="${pageContext.request.contextPath}/checkqrpaymentstatus"
 					type="button">here.</a></label></td>
 		</tr>
 	</table>

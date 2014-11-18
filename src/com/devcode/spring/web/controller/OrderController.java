@@ -20,8 +20,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.devcode.spring.service.OrderService;
 import com.devcode.spring.service.PaymentService;
+import com.devcode.spring.service.UsersService;
 import com.devcode.spring.web.dao.CustomerOrder;
 import com.devcode.spring.web.dao.FormValidationGroup;
+import com.devcode.spring.web.dao.User;
 import com.devcode.spring.web.dao.ws.CustomerBank;
 import com.devcode.spring.web.dao.ws.CustomerCreditcard;
 import com.devcode.spring.web.dao.ws.CustomerPayPal;
@@ -32,8 +34,21 @@ import com.seamless.ers.interfaces.external.ErswsSendInvoiceResponse;
 public class OrderController {
 
 	private OrderService orderService;
+	
+	private UsersService usersService;
 
 	private PaymentService paymentService;
+	
+	
+	@Autowired
+	public UsersService getUsersService() {
+		return usersService;
+	}
+
+	@Autowired
+	public void setUsersService(UsersService usersService) {
+		this.usersService = usersService;
+	}
 
 	@Autowired
 	public void setPaymentService(PaymentService paymentService) {
@@ -55,7 +70,7 @@ public class OrderController {
 		if (qty == 0) {
 			return "redirect:/products";
 		}
-		
+
 		orderService.addProduct(productId, qty, cart);
 		return "redirect:/products";
 
@@ -70,7 +85,7 @@ public class OrderController {
 		cart = new CustomerOrder();
 		request.getSession().setAttribute("cart", cart);
 		return cart;
-	}	
+	}
 
 	@RequestMapping("/checkout")
 	public String checkOut(HttpServletRequest request, Model model) {
@@ -85,18 +100,6 @@ public class OrderController {
 
 	}
 
-	@RequestMapping("/paypal")
-	public String payPal(HttpServletRequest request, Model model) {
-
-		CustomerOrder cart = getCurrentCart(request);
-		orderService.calculateCart(cart);
-		model.addAttribute("cart", cart);
-		model.addAttribute("customerCreditcard", new CustomerCreditcard());
-		model.addAttribute("customerPayPal", new CustomerPayPal());
-
-		return "paypal";
-
-	}
 
 	@RequestMapping(value = "/verifyCustomerCreditcard", method = RequestMethod.POST)
 	public String verifyCustomerCreditcard(
@@ -109,15 +112,18 @@ public class OrderController {
 			return "checkout";
 
 		}
-		customerCreditcard.setSessionId(RequestContextHolder.currentRequestAttributes().getSessionId());
-		customerCreditcard.setUserId(SecurityContextHolder.getContext() .getAuthentication().getName());
+		customerCreditcard.setSessionId(RequestContextHolder
+				.currentRequestAttributes().getSessionId());
+		customerCreditcard.setUserId(SecurityContextHolder.getContext()
+				.getAuthentication().getName());
 
 		CustomerOrder cart = getCurrentCart(request);
 		orderService.calculateCart(cart);
 
 		if (paymentService.verifyCard(customerCreditcard) == true) {
 
-			String customer = SecurityContextHolder.getContext().getAuthentication().getName();
+			String customer = SecurityContextHolder.getContext()
+					.getAuthentication().getName();
 			orderService.submitOrder(cart, customer);
 
 			return "thankspage";
@@ -127,103 +133,121 @@ public class OrderController {
 
 	}
 
-	
 	@RequestMapping("/qrsepayment")
-	public String sEQRPayment(HttpServletRequest request, Model model) throws RemoteException {
+	public ErswsSendInvoiceResponse sEQRPayment(HttpServletRequest request) {
 
 		CustomerOrder cart = getCurrentCart(request);
 		orderService.calculateCart(cart);
-		
-		try {			
-			ErswsSendInvoiceResponse invoiceResponse = paymentService.sendInvoice(cart);
-			FileOutputStream qrCode = paymentService.generateQRCode(invoiceResponse);
-			
-			model.addAttribute("qrcode",qrCode);
-			
-			String redirected = sEQRPaymentConfirmation(invoiceResponse, request);
-			
-			return redirected;
-			
+		ErswsSendInvoiceResponse invoiceResponse = new ErswsSendInvoiceResponse();
+
+		try {
+			invoiceResponse = paymentService.sendInvoice(cart);
+			@SuppressWarnings("unused")
+			FileOutputStream qrCode = paymentService
+					.generateQRCode(invoiceResponse);
+
 		} catch (MalformedURLException e) {
-			
+
 			e.printStackTrace();
 		}
-		
 
-		return "purchasingerror";
+		return invoiceResponse;
 
 	}
-	
-	@RequestMapping("/qrseconfirmation")
-	public String sEQRPaymentConfirmation(ErswsSendInvoiceResponse invoiceResponse, HttpServletRequest request) throws RemoteException {
-		
+
+	@RequestMapping("/checkqrpaymentstatus")
+	public String checkQRPaymentStatus(HttpServletRequest request,
+			ErswsSendInvoiceResponse invoiceResponse) throws RemoteException,
+			MalformedURLException {
+
 		CustomerOrder cart = getCurrentCart(request);
 		orderService.calculateCart(cart);
-		
-		ErswsPaymentStatusResponse response = paymentService.getResponseStatus(invoiceResponse);					
-		
-		boolean status = paymentService.checkPaymentStaus(response);					
-		
-		if (status == true){
-		String customer = SecurityContextHolder.getContext().getAuthentication().getName();
-		orderService.submitOrder(cart, customer);
-        	
-		return "thankspage";	
-		}
-		
-		return "purchasingerror";
-	}
-	
-	
-	
-	@RequestMapping(value ="/bankPayment",method = RequestMethod.GET)
-	public ModelAndView  bankPayment(HttpServletRequest request, Model model,@Validated(FormValidationGroup.class) CustomerBank customerBank,
-			                           BindingResult result) {
+		invoiceResponse = sEQRPayment(request);
 
-		customerBank.setSessionId(RequestContextHolder.currentRequestAttributes().getSessionId());
-		customerBank.setUserId(SecurityContextHolder.getContext().getAuthentication().getName());
+		ErswsPaymentStatusResponse response = paymentService
+				.getResponseStatus(invoiceResponse);
+		String status = response.getResultDescription();
+
+		System.out.println("Result: " + status + "\n" + response.toString());
+
+		if (status == "SUCCESS") {
+
+			String customer = SecurityContextHolder.getContext()
+					.getAuthentication().getName();
+			orderService.submitOrder(cart, customer);
+
+			return "thankspage";
+		}
+
+		return "qrsepayment";
+	}
+
+	@RequestMapping(value = "/bankPayment", method = RequestMethod.GET)
+	public ModelAndView bankPayment(HttpServletRequest request, Model model,
+			@Validated(FormValidationGroup.class) CustomerBank customerBank,
+			BindingResult result) {
+
+		customerBank.setSessionId(RequestContextHolder
+				.currentRequestAttributes().getSessionId());
+		customerBank.setUserId(SecurityContextHolder.getContext()
+				.getAuthentication().getName());
 
 		CustomerOrder cart = getCurrentCart(request);
 		orderService.calculateCart(cart);
 		double totalAmount = cart.getTotalPrice();
 		String amount = Double.toString(totalAmount);
 		customerBank.setAmount(amount);
-		
-		return new ModelAndView("redirect:"+ paymentService.bankPayment(customerBank));
-	
+
+		return new ModelAndView("redirect:"
+				+ paymentService.bankPayment(customerBank));
+
 	}
 
 	@RequestMapping("/bankLink")
 	public String bankLink(HttpServletRequest request) {
+	
+		saveOrder(request);
 
 		return "thankspage";
 
 	}
 
-	@RequestMapping(value = "/PayPalPayment", method = RequestMethod.POST)
-	public ModelAndView PayPalPayment(
-			HttpServletRequest request,
-			Model model,
-			@Validated(FormValidationGroup.class) CustomerPayPal customerPayPal,
-			BindingResult result) {
-
-		if (result.hasErrors()) {
-
-			return  new ModelAndView("purchasingerror");
-
-		}
-		customerPayPal.setSessionId(RequestContextHolder.currentRequestAttributes().getSessionId());
-		customerPayPal.setUserId(SecurityContextHolder.getContext().getAuthentication().getName());
+	@RequestMapping(value="/paypal")
+	public ModelAndView payPal(HttpServletRequest request, Model model,
+			@Validated(FormValidationGroup.class) CustomerPayPal customerPayPal,BindingResult result) {
 
 		CustomerOrder cart = getCurrentCart(request);
 		orderService.calculateCart(cart);
+		model.addAttribute("cart", cart);
+		model.addAttribute("customerCreditcard", new CustomerCreditcard());
+		model.addAttribute("customerPayPal", new CustomerPayPal());
+
+		if (result.hasErrors()) {
+			return new ModelAndView("purchasingerror");
+		}
+		customerPayPal.setSessionId(RequestContextHolder.currentRequestAttributes().getSessionId());
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		customerPayPal.setUserId(username);
+//		customerPayPal.setEmail(usersService.getUser(username).getEmail());
+	
+		orderService.calculateCart(cart);
 		double totalAmount = cart.getTotalPrice();
 		String amount = Double.toString(totalAmount);
-		customerPayPal.setAmount(amount);
+		customerPayPal.setAmount(amount);	
 
-		 return  new ModelAndView(paymentService.payPalPayment(customerPayPal));
+		return new ModelAndView(paymentService.payPalPayment(customerPayPal));
 
 	}
+	
+	@RequestMapping("/paypalLink")
+	public String paypalLink(HttpServletRequest request) {
+	
+          saveOrder(request);
+		
+          return "thankspage";
+
+	}
+
 
 	@RequestMapping("/cart")
 	public String showCart(HttpServletRequest request, Model model) {
@@ -253,6 +277,19 @@ public class OrderController {
 		orderService.removeProduct(productId, cart);
 		model.addAttribute("cart", cart);
 		return "redirect:/checkout";
+	}
+
+	@RequestMapping("/thankspage")
+	public String ThanksPage() {
+		return "thankspage";
+	}
+	
+	public void saveOrder(HttpServletRequest request){
+		CustomerOrder cart = getCurrentCart(request);
+		orderService.calculateCart(cart);
+		String customer = SecurityContextHolder.getContext().getAuthentication().getName();
+		orderService.submitOrder(cart, customer);
+		
 	}
 
 }
