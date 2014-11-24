@@ -303,7 +303,7 @@ public class PaymentService {
 	public ErswsPaymentStatusResponse getResponseStatus(ErswsSendInvoiceResponse invoiceResponse) throws RemoteException, MalformedURLException {
 		
 		String url = "https://extdev.seqr.com/extclientproxy/service/v2?wsdl";
-		//String url = "https://extdev4.seqr.se/soap/merchant/cashregister-2?wsdl";
+//		String url = "https://extdev4.seqr.se/soap/merchant/cashregister-2?wsdl";
 		
 		URL endpointURL = new URL(url);
         ERSWSExternalClientServiceImplServiceSoapBindingStub paymentStatus = 

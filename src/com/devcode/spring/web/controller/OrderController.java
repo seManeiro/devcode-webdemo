@@ -116,7 +116,7 @@ public class OrderController {
 	}
 
 	@RequestMapping("/qrsepayment")
-	public ErswsSendInvoiceResponse sEQRPayment(HttpServletRequest request,Model model) {
+	public ErswsSendInvoiceResponse sEQRPayment(HttpServletRequest request) {
 
 		CustomerOrder cart = getCurrentCart(request);
 		orderService.calculateCart(cart);
@@ -143,7 +143,7 @@ public class OrderController {
 
 		CustomerOrder cart = getCurrentCart(request);
 		orderService.calculateCart(cart);
-//		invoiceResponse = sEQRPayment(request);
+		invoiceResponse = sEQRPayment(request);
 
 		ErswsPaymentStatusResponse response = paymentService.getResponseStatus(invoiceResponse);
 		String status = response.getResultDescription();
