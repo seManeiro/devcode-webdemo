@@ -3,12 +3,12 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
-
+<div class="check_a">
 <div>
-	<div class ="row">
+	<div class ="">
 		<div class ="thumbnail">
              <sec:authorize access='isAuthenticated()'>
-               <h4>Customer:&nbsp; <sec:authentication property="principal.username"/></h4>
+               <h4 >Customer:&nbsp; <sec:authentication property="principal.username"/></h4>
           
              </sec:authorize >
 
@@ -17,65 +17,70 @@
 	        </sec:authorize >
 	    </div>
 	</div>
+ </div>
 </div>
 
-<hr>
 
-<div>
-	<div class="product-list">	
-	
-		<c:forEach var="orderline" items="${cart.orderLines}">
-				
-		    <div class="jumbotron">
+<div class="cart-container">
+    <div class="cart">	
 
-				<div class="container">
-					<div class="">			
-						<h2 style="color:red;">${orderline.product.brand}</h2>
-						<img align="right" src="${orderline.product.img}" height="120" width="120"border="0" />
-						<h3>${orderline.product.name}</h3>
-						
-						&nbsp; &nbsp; &nbsp;<spam style="color:gray" ><b><mark> ${orderline.quantity}</mark></b></spam> units.
-						<h3 class="warning"> Price ${orderline.product.price} USD</h3>
+	  <table class="table checkout">	
+		  <c:forEach var="orderline" items="${cart.orderLines}">
 
-						<sf:form method="GET"
-							action="${pageContext.request.contextPath}/remove">
-							<input type="hidden" name="productId" value="${orderline.product.id}">
-							<input class="btn btn-xs btn-danger" style="align: right; -webkit-border-top-left-radius: 400px; -webkit-border-top-right-radius: 34px; -webkit-border-bottom-right-radius: 200px; -webkit-border-bottom-left-radius: 3px; -moz-border-radius-topleft: 400px; -moz-border-radius-topright: 34px; -moz-border-radius-bottomright: 200px; -moz-border-radius-bottomleft: 3px; border-top-left-radius: 400px; border-top-right-radius: 34px; border-bottom-right-radius: 200px; border-bottom-left-radius: 3px;"
-								type="submit" value="X">
-						</sf:form>
-					 </div>
-				</div>
-			</div>	
-			<hr>
-		</c:forEach>
+		       <tr class="min-cart">				
+		    
+					<td><img align="right" src="${orderline.product.img}" height="120" width="120"border="0" /></td>
+					<td>${orderline.product.brand}</td>
+					<td>${orderline.product.name}</td>			
+					<td><mark> ${orderline.quantity}</mark> units.</td>			
+					<td>Price ${orderline.product.price} EUR</td>			
+					<td>	<sf:form method="GET"
+									action="${pageContext.request.contextPath}/remove">
+									<input type="hidden" name="productId" value="${orderline.product.id}">
+								<input class="btn btn-xs btn-danger btn-remove" type="submit" value="X">
+							</sf:form>
+					</td>			
+			
+			    </tr>
+		
+			</c:forEach>
+				<tr class="min-cart">
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td></td>
+					<td><h4>Total price: <b>${cart.totalPrice} EUR</b></h4></td>
+					
+		  		</tr>
+      </table>
 
-			 <h3 class="tolalprice">&nbsp;Total Price: <spam style="color:gray">${cart.totalPrice}</spam> USD</h3>
-	
-	</div>
+   </div>
 </div>
 
-<hr>
+
+
 <sec:authorize access='isAuthenticated()'>
-	<div class="shipmnet">
+	<div class="">
 		
 			<div class="jumbotron">
 
-				<h4 align="center"><b>Shipmnet</b></h4>
+				<h4><b>Shipmnet</b></h4>
+				<hr/><br/>
 				<form class="form" action="submitshipment">
 
 					<div class="row">
 						<input type="radio" name="shipment" value="male"> Posten 
-						<img src="resources/img/posten.png"> Through the Post service,  	would your costs be 45 SEK.Shipment between 3-5 working days
+						<img src="resources/img/posten.png"> Through the Post service,  	would your costs be 12 EUR. Shipment between 3-5 working days
 					</div>
-					
+					<br/>
 					<div class="row">
 						<input type="radio" name="shipment" value="male"> Bring
-                         <img src="resources/img/bring.png"> Through the Post service, would your costs be 55 SEK.Shipment between 2-3 working days 
+                         <img src="resources/img/bring.png"> Through the Post service, would your costs be 15 EUR. Shipment between 2-3 working days 
 					</div>
-					
+					<br/>
 					<div class="row">
 						<input type="radio" name="shipment" value="male"> Shenker
-						<img src="resources/img/shenker.png"> Through the Post service, would your costs be 65 SEK.Shipment between 1-3 working
+						<img src="resources/img/shenker.png"> Through the Post service, would your costs be 20 EUR. Shipment between 1-3 working
 						days
 					</div>
 
@@ -84,9 +89,9 @@
 		
 	</div>
 </sec:authorize>
-<hr>
 
-<div>
+
+<div class="payments">
 
 	<div  class="jumbotron">
 
@@ -103,7 +108,7 @@
 
 <a  id="paypal" class="btn btn-default navbar-btn" type="button" href="${pageContext.request.contextPath}/paypal">PayPal</a>
 
-<a  id="qrcode" class="btn btn-default navbar-btn" href="${pageContext.request.contextPath}/qrsepayment" type="button" >SEQR</a>
+<a  id="" class="btn btn-default navbar-btn" href="${pageContext.request.contextPath}/qrsepayment" type="button" >SEQR</a>
 
 				<div id="target1" style="display: none">
 				
@@ -180,7 +185,7 @@
 							    </tr>
 								<tr>
 							        <td >
-							        <input style="align:right;" id="submitinput" value="Proceed Buy" type="submit" class="btn btn-warning" />
+							        <input class="btn btn-warning continue" id="submitinput" value="Continue" type="submit" class="btn btn-warning" />
 							        
 							        </td>
 						        </tr>
@@ -188,25 +193,27 @@
 				    	</table>
 					</sf:form>
 				</div>
-					
-		   <div id="target2" style="display: none">
+				
+<div id="target2" style="display: none">
 				
 						 <table class="table2">
-						   <h4 align="center" style="color:gray;">SEQR payment</h4>
+						       <h4 align="center" style="color:gray;">SEQR payment</h4>
 							  <tr class="">
 							    <h5>Start your SEQR APP and scan this code</h5>
 									
 									<td>
 									
 									<img src="resources/img/DEVCODE_QR_Code.PNG">
-								   </td>
-							</tr>
-							<tr>
+							 	   </td>
+							  </tr>
+							  <tr>
+							       <td><label>After scaning click <a id="qrcode" class="btn btn-default navbar-btn" href="${pageContext.request.contextPath}/checkqrpaymentstatus" type="button">here.</a></label>
+					               </td>
 							        
-						    </tr>					
-						</table>
+						      </tr>					
+						  </table>
 					
-					</div>			
+</div>			
 					
 			</sec:authorize>
 
@@ -214,6 +221,8 @@
 	</div>
 
 </div>
+
+<div>
 
 <script>
 
@@ -223,12 +232,9 @@
 	}
 	
 	$("#creditCard").click(function() {
-		$("#target1").slideToggle("400");
+		$("#target1").slideToggle("800");
 	});
 	
-	$("#qrcode").click(function() {
-		$("#target2").slideToggle("400");
-	});
 
 	function setIframe(element, location) {
 		var theIframe = document.createElement("iframe");

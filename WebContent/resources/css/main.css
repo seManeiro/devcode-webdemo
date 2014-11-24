@@ -11,8 +11,8 @@ padding: 5px;
 }
 
 .imgprod{
-	height: 60px;
-	width: 60px;
+	height: 166px !important;
+	width: 212px;
 }
 
 .shipmnet{
@@ -99,6 +99,11 @@ button:hover, button:active, button:focus .add {
 	padding: 5px;
 }
 
+div#target2{
+	padding: 10px !important;
+	margin: 20px !important;
+}
+
 div.CartView {
 	position: absolute;
 	top: 130px;
@@ -145,9 +150,79 @@ div.navdiv {
 }
 
 div.contentbody {
-	position:relative;
+	
+	
+	width:100%;
 	top:40px;
-	padding: 20px;
+	
+}
+div.cart-container{
+	background-color: #DBDBC1 !important;
+	width: 100%;
+}
+
+div.qr-conteiner{
+	background-color: #F8F8F8 !important;
+	width: 100%;
+}
+
+div .cart{
+	background-color: #ffffff!important;
+	border-radius: 4px;
+	margin-right: 10%;
+	margin-left: 10%;
+
+	
+}
+
+table.checkout{
+	
+	
+	
+}
+tr.min-cart{
+	
+}
+.continue{
+	align: right;
+	position: absolute;
+	right: 20%;
+	
+}
+
+.btn-remove{
+	align: right;
+	-webkit-border-top-left-radius: 400px; 
+	-webkit-border-top-right-radius: 34px; 
+	-webkit-border-bottom-right-radius: 200px; 
+	-webkit-border-bottom-left-radius: 3px; 
+	-moz-border-radius-topleft: 400px; 
+	-moz-border-radius-topright: 34px; 
+	-moz-border-radius-bottomright: 200px; 
+	-moz-border-radius-bottomleft: 3px; 
+	border-top-left-radius: 400px; 
+	border-top-right-radius: 34px; 
+	border-bottom-right-radius: 200px; 
+	border-bottom-left-radius: 3px;
+}
+div.bodyprod {
+	
+	height: 1400px;
+	width:100%;
+	background-color: #DBDBC1 !important;
+	top:40px;
+	padding: 10px;
+}
+
+div .check_a{
+	width:100%;
+	background-color: #DBDBC1 !important;
+	padding: 10px;
+}
+div.payments{
+	width:100%;
+	background-color: #DBDBC1 !important;
+	size: auto;
 }
 
 div.addproduct {
@@ -334,3 +409,4 @@ input.delete {
 .table-hover tbody tr:hover>td.info {
 	background-color: #c4e3f3 !important;
 }
+

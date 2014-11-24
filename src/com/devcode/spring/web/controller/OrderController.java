@@ -40,25 +40,7 @@ public class OrderController {
 	private PaymentService paymentService;
 	
 	
-	@Autowired
-	public UsersService getUsersService() {
-		return usersService;
-	}
 
-	@Autowired
-	public void setUsersService(UsersService usersService) {
-		this.usersService = usersService;
-	}
-
-	@Autowired
-	public void setPaymentService(PaymentService paymentService) {
-		this.paymentService = paymentService;
-	}
-
-	@Autowired
-	public void setOService(OrderService orderService) {
-		this.orderService = orderService;
-	}
 
 	@RequestMapping("/addtocart")
 	public String addToCart(HttpServletRequest request,
@@ -134,17 +116,16 @@ public class OrderController {
 	}
 
 	@RequestMapping("/qrsepayment")
-	public ErswsSendInvoiceResponse sEQRPayment(HttpServletRequest request) {
+	public ErswsSendInvoiceResponse sEQRPayment(HttpServletRequest request,Model model) {
 
 		CustomerOrder cart = getCurrentCart(request);
 		orderService.calculateCart(cart);
 		ErswsSendInvoiceResponse invoiceResponse = new ErswsSendInvoiceResponse();
-
+		
 		try {
 			invoiceResponse = paymentService.sendInvoice(cart);
 			@SuppressWarnings("unused")
-			FileOutputStream qrCode = paymentService
-					.generateQRCode(invoiceResponse);
+			FileOutputStream qrCode = paymentService.generateQRCode(invoiceResponse);
 
 		} catch (MalformedURLException e) {
 
@@ -162,25 +143,33 @@ public class OrderController {
 
 		CustomerOrder cart = getCurrentCart(request);
 		orderService.calculateCart(cart);
-		invoiceResponse = sEQRPayment(request);
+//		invoiceResponse = sEQRPayment(request);
 
-		ErswsPaymentStatusResponse response = paymentService
-				.getResponseStatus(invoiceResponse);
+		ErswsPaymentStatusResponse response = paymentService.getResponseStatus(invoiceResponse);
 		String status = response.getResultDescription();
 
-		System.out.println("Result: " + status + "\n" + response.toString());
+		while (response.getResultCode() == 0 && response.getStatus().toString() == "ISSUED"){
+			
+		 response = paymentService.getResponseStatus(invoiceResponse);
+		 status = response.getResultDescription();
+		 System.out.println("Status: "+ response.getStatus().toString());
+		 System.out.println("Code: "+ response.getResultCode());
+		
+		 if (response.getResultCode() != 0){
+			 return "purchasingerror";
+			}
+		}
+		if (response.getStatus().toString() == "PAID")
+		{
 
-		if (status == "SUCCESS") {
-
-			String customer = SecurityContextHolder.getContext()
-					.getAuthentication().getName();
+			String customer = SecurityContextHolder.getContext().getAuthentication().getName();
 			orderService.submitOrder(cart, customer);
 
 			return "thankspage";
-		}
-
+	    }
+	  
 		return "qrsepayment";
-	}
+   }
 
 	@RequestMapping(value = "/bankPayment", method = RequestMethod.GET)
 	public ModelAndView bankPayment(HttpServletRequest request, Model model,
@@ -228,7 +217,6 @@ public class OrderController {
 		customerPayPal.setSessionId(RequestContextHolder.currentRequestAttributes().getSessionId());
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		customerPayPal.setUserId(username);
-//		customerPayPal.setEmail(usersService.getUser(username).getEmail());
 	
 		orderService.calculateCart(cart);
 		double totalAmount = cart.getTotalPrice();
@@ -292,4 +280,23 @@ public class OrderController {
 		
 	}
 
+	@Autowired
+	public UsersService getUsersService() {
+		return usersService;
+	}
+
+	@Autowired
+	public void setUsersService(UsersService usersService) {
+		this.usersService = usersService;
+	}
+
+	@Autowired
+	public void setPaymentService(PaymentService paymentService) {
+		this.paymentService = paymentService;
+	}
+
+	@Autowired
+	public void setOService(OrderService orderService) {
+		this.orderService = orderService;
+	}
 }

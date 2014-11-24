@@ -199,7 +199,6 @@ public class PaymentService {
 		       try {
 				
 				FileOutputStream fileOut = new FileOutputStream(new File("C:\\Users\\se\\workspace\\devcode\\devcode-webdemo-9-ws\\WebContent\\resources\\img\\DEVCODE_QR_Code.PNG"));
-				
 				fileOut.write(out.toByteArray());
 				
 				return fileOut;
@@ -304,20 +303,21 @@ public class PaymentService {
 	public ErswsPaymentStatusResponse getResponseStatus(ErswsSendInvoiceResponse invoiceResponse) throws RemoteException, MalformedURLException {
 		
 		String url = "https://extdev.seqr.com/extclientproxy/service/v2?wsdl";
+		//String url = "https://extdev4.seqr.se/soap/merchant/cashregister-2?wsdl";
+		
 		URL endpointURL = new URL(url);
+        ERSWSExternalClientServiceImplServiceSoapBindingStub paymentStatus = 
+        		new ERSWSExternalClientServiceImplServiceSoapBindingStub(endpointURL,null);	
+		
 		ClientContext clientContext = new ClientContext() ;
 		
 		String invoiceReference = invoiceResponse.getInvoiceReference();           
         int invoiceVersion= invoiceResponse.getResultCode();
          
-        ERSWSExternalClientServiceImplServiceSoapBindingStub paymentStatus = new ERSWSExternalClientServiceImplServiceSoapBindingStub(endpointURL,null);	
-		ErswsPaymentStatusResponse response = paymentStatus.getPaymentStatus(addClientContext(clientContext), invoiceReference, invoiceVersion);
-		
-		
-		response.setResultDescription(invoiceResponse.getResultDescription()); 
-		System.out.println("invoice response: "+invoiceResponse.getResultDescription().toString());
-		response.setErsReference(invoiceResponse.getErsReference());
-		response.setResultCode(invoiceResponse.getResultCode());
+
+		ErswsPaymentStatusResponse response = paymentStatus.getPaymentStatus(
+				addClientContext(clientContext), invoiceReference, invoiceVersion);
+		System.out.println("respone: "+ response.getResultCode()+ response.getResultDescription()+ response.getStatus());
 		
 		return response;
 	}
