@@ -26,16 +26,12 @@ public class CustomerOrder {
 	@Temporal(TemporalType.DATE)
 	private Date dateOrderPlaced;
 
-//	@ManyToOne(cascade = CascadeType.PERSIST)
-//	@JoinColumn(name = "customerId")
 	@Column(name = "customerId")
 	private String customer;
 
 	@Column(name = "total_order_price")
 	private double totalPrice;
 
-//	(mappedBy = "order", cascade = CascadeType.PERSIST)
-//	@OneToMany
 	@Transient
 	private Collection<OrderLine> orderLines;
 

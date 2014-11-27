@@ -59,13 +59,12 @@
 							<button type="submit" class="btn btn-success" value="Login">Sign
 								in</button>
 							<div class="form-group">
-								<label class="navbar-form">remember me</label> <input
+								<label class="navbar-form"><small>remember me</small></label> <input
 									type='checkbox' name='_spring_security_remember_me'
 									checked="checked" />
 							</div>
 							<div class="form-group">
-								<a class="btn" href="<c:url value="/newcustomeraccount"/>">Create
-									new Account</a>
+								<a class="btn" href="<c:url value="/newcustomeraccount"/>"><small>Create Account</small></a>
 
 							</div>
 						</sec:authorize>
@@ -75,7 +74,7 @@
 							<a class="btn btn-xs btn-success" href="${logoutUrl}">Sign out</a>
 						</sec:authorize>
 						<div class="form-group">
-							<a id="viewcart" class="btn btn-xs btn-success2" href="<c:url value="/checkout"/>"><small>ShoppingCart</small></a>
+							<a id="viewcart" class="btn btn-xs btn-success2" href="<c:url value="/checkout"/>"><small>Checkout</small></a>
 						</div>
 					</form>
 				</div>

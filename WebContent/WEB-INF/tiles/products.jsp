@@ -3,6 +3,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 
+
+<button id ="target3" class ="btn-primary btn-xs target3">Cart Content</button>
+<div id = "minicart" class ="rigthtd">
+
+<a class="cartitem" href="<c:url value='/cart'/>">CartItems (<spam id="numberitems">0</spam> )</a>
+
+</div>
+
+
 <div class ="bodyprod">
   <div class="jumbotron">
 	
@@ -51,4 +60,29 @@
   </div>
 </div>
 
+
+
+
+<script>
+ function updateCart(data){
+	$("#numberitems").text(data.number);
+ }
+
+function onLoad(){
+	 updatePage();
+	window.setInteval(5000, updatePage);
+	
+}
+
+function updatePage(){
+	$.getJSON("<c:url value="/minicart" />", updateCart);
+}
+
+$ (document).ready(onLoad);
+
+$("#target3").click(function() {
+	$("#minicart").slideToggle("800");
+});
+
+</script>
 

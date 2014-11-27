@@ -3,6 +3,9 @@ package com.devcode.spring.web.controller;
 import java.io.FileOutputStream;
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -23,7 +27,7 @@ import com.devcode.spring.service.PaymentService;
 import com.devcode.spring.service.UsersService;
 import com.devcode.spring.web.dao.CustomerOrder;
 import com.devcode.spring.web.dao.FormValidationGroup;
-import com.devcode.spring.web.dao.User;
+import com.devcode.spring.web.dao.OrderLine;
 import com.devcode.spring.web.dao.ws.CustomerBank;
 import com.devcode.spring.web.dao.ws.CustomerCreditcard;
 import com.devcode.spring.web.dao.ws.CustomerPayPal;
@@ -39,7 +43,20 @@ public class OrderController {
 
 	private PaymentService paymentService;
 	
-	
+	@Autowired
+	public void setUsersService(UsersService usersService) {
+		this.usersService = usersService;
+	}
+
+	@Autowired
+	public void setPaymentService(PaymentService paymentService) {
+		this.paymentService = paymentService;
+	}
+
+	@Autowired
+	public void setOService(OrderService orderService) {
+		this.orderService = orderService;
+	}
 
 
 	@RequestMapping("/addtocart")
@@ -285,18 +302,27 @@ public class OrderController {
 		return usersService;
 	}
 
-	@Autowired
-	public void setUsersService(UsersService usersService) {
-		this.usersService = usersService;
-	}
+	@RequestMapping(value ="minicart", method=RequestMethod.GET, produces ="application/json" )
+	@ResponseBody
+	public Map<String, Object> MiniCart(HttpServletRequest request) {
 
-	@Autowired
-	public void setPaymentService(PaymentService paymentService) {
-		this.paymentService = paymentService;
-	}
+		CustomerOrder cart = getCurrentCart(request);
+		List<OrderLine> orderLines = null;	
+		
+		if (cart == null) {
+			cart = new CustomerOrder();
+			
+		} else {
+			orderLines =  (List<OrderLine>) cart.getOrderLines();
+			OrderLine orderlines = null;
+		    orderlines.getQuantity();
+		}
 
-	@Autowired
-	public void setOService(OrderService orderService) {
-		this.orderService = orderService;
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("orderLines",orderLines);
+		data.put("number", orderLines.size());
+
+		return data;
 	}
+	
 }

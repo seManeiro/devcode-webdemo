@@ -19,16 +19,13 @@ public class OrderLine {
 	@Column(name = "quantity")
 	private int quantity;
 
-//	@ManyToOne
-//	@JoinColumn(name = "orderId")
+
 	@Column (name = "orderId")
 	private String orderId;
 	
 	@Transient
 	private CustomerOrder customerOrder;
 
-//	@ManyToOne
-//	@JoinColumn(name = "productId")
 	@Column(name = "productId")
 	private int productId;
 	
