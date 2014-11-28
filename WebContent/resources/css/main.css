@@ -33,13 +33,23 @@ a.cartitem{
 div.rigthtd{
 	z-index: 1;
 	background-color: #dee4e4;
+	opacity: 0.92;
+    filter: alpha(opacity=92);
 	display: none;
 	padding:5px;
+	border : 1px solid #bfcaca;
+	border-radius: 10px;
 	position: absolute;
 	right: 4%;
 	width: auto;
 	height: auto;
 	top:13%;
+}
+
+td.mininame{
+
+	size:auto;
+	padding-left: 12px;
 }
 button.target3{
 	z-index: 1;

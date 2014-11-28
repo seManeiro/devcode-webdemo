@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +29,7 @@ import com.devcode.spring.service.UsersService;
 import com.devcode.spring.web.dao.CustomerOrder;
 import com.devcode.spring.web.dao.FormValidationGroup;
 import com.devcode.spring.web.dao.OrderLine;
+import com.devcode.spring.web.dao.User;
 import com.devcode.spring.web.dao.ws.CustomerBank;
 import com.devcode.spring.web.dao.ws.CustomerCreditcard;
 import com.devcode.spring.web.dao.ws.CustomerPayPal;
@@ -58,23 +60,11 @@ public class OrderController {
 		this.orderService = orderService;
 	}
 
-
-	@RequestMapping("/addtocart")
-	public String addToCart(HttpServletRequest request,
-			@RequestParam(value = "productId", required = true) int productId,
-			@RequestParam(value = "qty", required = true) int qty) {
-
-		CustomerOrder cart = getCurrentCart(request);
-
-		if (qty == 0) {
-			return "redirect:/products";
-		}
-
-		orderService.addProduct(productId, qty, cart);
-		return "redirect:/products";
-
+	@Autowired
+	public UsersService getUsersService() {
+		return usersService;
 	}
-
+	
 	private CustomerOrder getCurrentCart(HttpServletRequest request) {
 		CustomerOrder cart = (CustomerOrder) request.getSession().getAttribute(
 				"cart");
@@ -111,19 +101,19 @@ public class OrderController {
 			return "checkout";
 
 		}
-		customerCreditcard.setSessionId(RequestContextHolder
-				.currentRequestAttributes().getSessionId());
-		customerCreditcard.setUserId(SecurityContextHolder.getContext()
-				.getAuthentication().getName());
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		customerCreditcard.setSessionId(RequestContextHolder.currentRequestAttributes().getSessionId());
+		customerCreditcard.setUserId(username);
 
 		CustomerOrder cart = getCurrentCart(request);
 		orderService.calculateCart(cart);
 
 		if (paymentService.verifyCard(customerCreditcard) == true) {
 
-			String customer = SecurityContextHolder.getContext()
-					.getAuthentication().getName();
-			orderService.submitOrder(cart, customer);
+			String customer = SecurityContextHolder.getContext().getAuthentication().getName();
+			orderService.submitOrder(cart, customer);		
+			User user =usersService.getUser(username);
+			model.addAttribute("user",user);
 
 			return "thankspage";
 		}
@@ -269,8 +259,9 @@ public class OrderController {
 
 		CustomerOrder cart = getCurrentCart(request);
 		orderService.removeProduct(productId, cart);
+		orderService.calculateCart(cart);
 		model.addAttribute("cart", cart);
-		return "redirect:/cart";
+		return "redirect:/products";
 	}
 
 	@RequestMapping("/remove")
@@ -280,12 +271,18 @@ public class OrderController {
 
 		CustomerOrder cart = getCurrentCart(request);
 		orderService.removeProduct(productId, cart);
+		orderService.calculateCart(cart);
 		model.addAttribute("cart", cart);
 		return "redirect:/checkout";
 	}
 
 	@RequestMapping("/thankspage")
-	public String ThanksPage() {
+	public String ThanksPage(HttpServletRequest request, Model model) {
+	
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		User user =usersService.getUser(username);
+		model.addAttribute("user",user);
+	
 		return "thankspage";
 	}
 	
@@ -297,29 +294,46 @@ public class OrderController {
 		
 	}
 
-	@Autowired
-	public UsersService getUsersService() {
-		return usersService;
-	}
 
-	@RequestMapping(value ="minicart", method=RequestMethod.GET, produces ="application/json" )
-	@ResponseBody
-	public Map<String, Object> MiniCart(HttpServletRequest request) {
+	@RequestMapping("/addtocart")
+	public String addToCart(HttpServletRequest request,
+			@RequestParam(value = "productId", required = true) int productId,
+			@RequestParam(value = "qty", required = true) int qty) {
 
 		CustomerOrder cart = getCurrentCart(request);
+		
+
+		if (qty == 0) {
+			return "redirect:/products";
+		}
+		orderService.addProduct(productId, qty, cart);
+		orderService.calculateCart(cart);
+		return "redirect:/products";
+
+	}
+
+	@RequestMapping(value ="updatecart", method=RequestMethod.GET, produces ="application/json" )
+	@ResponseBody
+	public Map<String, Object> MiniCart(HttpServletRequest request, HttpServletResponse response) {
+
+		CustomerOrder cart = getCurrentCart(request);
+		
+		
 		List<OrderLine> orderLines = null;	
 		
 		if (cart == null) {
 			cart = new CustomerOrder();
 			
 		} else {
+			orderService.calculateCart(cart);
 			orderLines =  (List<OrderLine>) cart.getOrderLines();
-			OrderLine orderlines = null;
-		    orderlines.getQuantity();
+		 
+		  
 		}
 
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("orderLines",orderLines);
+		
 		data.put("number", orderLines.size());
 
 		return data;

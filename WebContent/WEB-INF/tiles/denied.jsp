@@ -1,3 +1,3 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="UTF-8"%>
 
-<h2>Access Denied</h2>
+<h2 align="center">Access Denied</h2>

@@ -19,6 +19,10 @@ public class ErrorHandler {
 		return "denied";
 	}
 	
+	@ExceptionHandler(RuntimeException.class)
+	public String handleRuntimeException(RuntimeException ex){
+		return "purchasingerror";
+	}
 
 	
 

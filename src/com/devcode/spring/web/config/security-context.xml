@@ -23,10 +23,17 @@
 		<security:intercept-url pattern="/productcreated" access="hasRole('ROLE_ADMIN')" />
 		<security:intercept-url pattern="/newaccount" access="hasRole('ROLE_ADMIN')" />
 		<security:intercept-url pattern="/accountcreated" access="hasRole('ROLE_ADMIN')" />
-		<security:intercept-url pattern="/createaccount" access="hasRole('ROLE_ADMIN')" />		
+		<security:intercept-url pattern="/createaccount" access="hasRole('ROLE_ADMIN')" />	
+		<security:intercept-url pattern="/verifyCustomerCreditcard" access="isAuthenticated()" />
+		<security:intercept-url pattern="/qrsepayment" access="isAuthenticated()" />	
+		<security:intercept-url pattern="/checkqrpaymentstatus" access="isAuthenticated()" />	
+		<security:intercept-url pattern="/paypal" access="isAuthenticated()" />	
+		<security:intercept-url pattern="/paypalLink" access="isAuthenticated()" />	
+		<security:intercept-url pattern="/bankLink" access="isAuthenticated()" />
+		<security:intercept-url pattern="/bankPayment" access="isAuthenticated()" />	
 		<security:intercept-url pattern="/resources/**" access="permitAll" />
 		<security:intercept-url pattern="/" access="permitAll" />
-		<security:intercept-url pattern="/minicart" access="permitAll" />
+		<security:intercept-url pattern="/updatecart" access="permitAll" />
 		<security:intercept-url pattern="/paypal" access="permitAll" />
 		<security:intercept-url pattern="/createqrcode" access="permitAll" />
 		<security:intercept-url pattern="/qrsepayment" access="permitAll" />
@@ -41,12 +48,14 @@
 		<security:intercept-url pattern="/login" access="permitAll" />
 		<security:intercept-url pattern="/thankspage" access="permitAll" />
 		<security:intercept-url pattern="/shoppingcart" access="permitAll" />
-		<security:intercept-url pattern="/cart" access="permitAll" />
+		<security:intercept-url pattern="/remove" access="permitAll" />
+		<security:intercept-url pattern="/removeproduct" access="permitAll" />
 		<security:intercept-url pattern="/denied" access="permitAll" />
 		<security:intercept-url pattern="/loggedout" access="permitAll" />
 		<security:intercept-url pattern="/newcustomeraccount" access="permitAll" />
 		<security:intercept-url pattern="/customeraccountcreated" access="permitAll" />
 		<security:intercept-url pattern="/products" access="permitAll" />
+		<security:intercept-url pattern="/**" access="denyAll" />
 		<security:form-login login-page="/login"
 			authentication-failure-url="/?error=true" />
 		<security:logout logout-success-url="/" logout-url="/logout" />
